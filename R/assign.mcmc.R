@@ -207,9 +207,11 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
   }
   P_kappa[1, , ] <- kappa_temp
   P_tau2[1, ] <- tau_temp	
-  
+
+  pb <- txtProgressBar(min=0, max=iter, width=80)
+  cat("| 0%                                  50%                                 100% |\n")
   for (i in 2:iter) {
-    if(i %% 100 == 0){cat("iteration", i, "\n", sep=" ")}
+    setTxtProgressBar(pb, i)
     
     #update B
     if (adaptive_B == TRUE){

@@ -40,9 +40,10 @@ bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500, burn_in
     PHI_S[1, ] <- rep(0, n)
     PHI_Delta[1, ] <- rep(0, n)
     PHI_tau2[1, ] <- rep(u/v, n)
-    
+    pb <- txtProgressBar(min=0, max=iter, width=80)
+    cat("| 0%                                  50%                                 100% |\n")
     for (i in 2:iter){
-      if(i %% 10 == 0){cat("iteration", i, "\n", sep=" ")}
+      setTxtProgressBar(pb, i)
       s_B_1 <- 1/(k * PHI_tau2[i-1, ]+ 1/sigma2^2)
       mu_B_1 <- s_B_1 * (apply(Y, 1, sum) - k2 * PHI_S[i-1, ]) * PHI_tau2[i-1, ]
       PHI_B[i, ] <- rnorm(n, mu_B_1, sapply(s_B_1, sqrt))

@@ -76,7 +76,7 @@ assign.cv.output <- function(processed.data, mcmc.pos.mean.trainingData, trainin
   setwd(outputDir)
   rownames(coef_train) <- names(processed.data$trainingData_sub)
   colnames(coef_train) <- names(trainingLabel)[-1]
-  write.csv(coef_train, file="pathway_activity_trainingset.csv")
+  utils::write.csv(coef_train, file="pathway_activity_trainingset.csv")
   
   #heatmaps of each pathway
   heatmap.train(diffGeneList=processed.data$diffGeneList, trainingData, trainingLabel)

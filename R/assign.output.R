@@ -90,7 +90,7 @@ assign.output <- function(processed.data, mcmc.pos.mean.testData, trainingData, 
   
   rownames(coef_test) <- colnames(processed.data$testData_sub)
   colnames(coef_test) <- pathName
-  write.csv(coef_test, file="pathway_activity_testset.csv")
+  utils::write.csv(coef_test, file="pathway_activity_testset.csv")
   
   #heatmaps of each pathway
   if (!is.null(trainingData) & !is.null(trainingLabel)){

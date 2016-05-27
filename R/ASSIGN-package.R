@@ -40,3 +40,33 @@ NULL
 #' a guide to targeted therapies. Nature, 439, 353-357.
 #' @keywords datasets
 NULL
+
+#' Pathway Signature Data
+#'
+#' Pathway signature RNA-Seq data from akt, bad, egfr, her2, igf1r, krasgv,
+#' krasqh, and raf pathways. This data has already been batch corrected with
+#' reference batch ComBat. This data can be combined with a test data set to
+#' predict pathway activity for the pathways.
+#'
+#'
+#' @name combat_train
+#' @docType data
+#' @format Data frame with control (GFP) and cell line signature RNA-Seq data.
+#' @source Bild et al.
+#' @keywords datasets
+NULL
+
+#' Pathway Signature Gene Lists
+#'
+#' Pathway signature gene lists have been optimized based on correlations of
+#' pathway activity data and protein data. The gene lists can be used to avoid
+#' the bayesian gene selection step of ASSIGN, which will decrease the amount of
+#' time it takes to run ASSIGN.
+#'
+#' @name gfrn_geneLists
+#' @docType data
+#' @format List of gene lists for akt, bad, egfr, her2, igf1r, krasgv, krasqh,
+#' and raf
+#' @source Bild et al.
+#' @keywords datasets
+NULL

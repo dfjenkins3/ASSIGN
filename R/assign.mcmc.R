@@ -103,8 +103,11 @@
 #' adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE)
 #' 
 #' @export assign.mcmc
-assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE, sigma_sZero = 0.01, sigma_sNonZero = 1, p_beta = 0.01, sigma_bZero = 0.01, sigma_bNonZero = 1, alpha_tau = 1, beta_tau = 0.01, Bg_zeroPrior=TRUE, S_zeroPrior=FALSE, ECM = FALSE)
-{  
+assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE,
+                        adaptive_S=FALSE, mixture_beta=TRUE, sigma_sZero = 0.01,
+                        sigma_sNonZero = 1, p_beta = 0.01, sigma_bZero = 0.01,
+                        sigma_bNonZero = 1, alpha_tau = 1, beta_tau = 0.01,
+                        Bg_zeroPrior=TRUE, S_zeroPrior=FALSE, ECM = FALSE) {
   cat("Start Gibbs sampling...\n")
   
   Y <- as.matrix(Y)
@@ -171,7 +174,7 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
   
   #initial values
   if (adaptive_B == TRUE){
-    B_temp <- rtnorm(n,0,1,lower=0)
+    B_temp <- msm::rtnorm(n,0,1,lower=0)
   } else {
     B_temp <- mu_B_0
   }
@@ -180,11 +183,11 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
   } else {
     S_temp <- S_0
   }
-  delta_temp <- matrix(rbern(onesNM, p_delta), n, m)
+  delta_temp <- matrix(Rlab::rbern(onesNM, p_delta), n, m)
   delta_pr_temp <- p_delta
   beta_temp <- matrix(0,m,k)
   if (mixture_beta == TRUE){
-    gamma_temp <- matrix(rbern(onesMK,p_beta), m, k)
+    gamma_temp <- matrix(Rlab::rbern(onesMK,p_beta), m, k)
     gamma_pr_temp <- matrix(p_beta, m, k)
   } else {
     gamma_temp <- matrix(rep(1, m*k), m, k)
@@ -221,7 +224,7 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
       if(ECM == TRUE) {
         B_temp <- mu_B_1
       } else {
-        B_temp <- rnorm(n, mu_B_1, sqrt(s_B_1))
+        B_temp <- stats::rnorm(n, mu_B_1, sqrt(s_B_1))
       }
     }
     
@@ -250,11 +253,13 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
         if (mixture_beta == TRUE){
           lower <- ifelse(gamma_temp[s, ]==1, 0, -Inf)
           upper <- ifelse(gamma_temp[s,]==1, 1, Inf)
-          beta_temp[s, ] <- rtnorm(k, mu_beta_1, sqrt(s_beta_1), lower, upper)
+          beta_temp[s, ] <- msm::rtnorm(k, mu_beta_1, sqrt(s_beta_1), lower,
+                                        upper)
           kappa_temp[s, ] <- beta_temp[s, ] * gamma_temp[s, ]
           
         } else {
-          beta_temp[s, ] <- rtnorm(k, mu_beta_1, sqrt(s_beta_1),lower=0,upper=1) 
+          beta_temp[s, ] <- msm::rtnorm(k, mu_beta_1, sqrt(s_beta_1),lower=0,
+                                        upper=1) 
         }
       }
     }
@@ -263,9 +268,9 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
     if (mixture_beta == TRUE){
       for (s in 1:m)
       {
-        gamma_b_div_a <- (pnorm(1) - pnorm(0)) * odds_beta * (sigma_b2 / sigma_b1) * exp(-1/2 *(beta_temp[s,]^2/sigma_b1^2 - beta_temp[s,]^2/sigma_b2^2))
+        gamma_b_div_a <- (stats::pnorm(1) - stats::pnorm(0)) * odds_beta * (sigma_b2 / sigma_b1) * exp(-1/2 *(beta_temp[s,]^2/sigma_b1^2 - beta_temp[s,]^2/sigma_b2^2))
         gamma_pr_temp[s, ] <- ifelse(beta_temp[s, ] < 0,  0, 1/(1+gamma_b_div_a))
-        gamma_temp[s, ] <- rbern(k, gamma_pr_temp[s, ])
+        gamma_temp[s, ] <- Rlab::rbern(k, gamma_pr_temp[s, ])
       }
     }
     
@@ -282,14 +287,14 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
         mu_S_1 <- s_S_inv_1[, j] *(tau_temp*(E1 %*% beta_temp[j, ]) + tmp4[, j]) 
         lower <- ifelse(mu_S_0[,j]>0, 0, -Inf)
         upper <- ifelse(mu_S_0[,j]>=0, Inf, 0)
-        S_temp[,j] <- rtnorm(n, mu_S_1, sqrt(s_S_inv_1[, j]),lower, upper)
+        S_temp[,j] <- msm::rtnorm(n, mu_S_1, sqrt(s_S_inv_1[, j]),lower, upper)
       }
       
       # update delta
       
       delta_b_div_a <- (sigma_s2 / sigma_s1) * odds * exp(-1/2 *(S_temp^2/sigma_s1^2 - (S_temp - S)^2/sigma_s2^2))
       delta_pr_temp <- 1/(1+delta_b_div_a)
-      delta_temp <- matrix(rbern(onesNM, 1/(1+delta_b_div_a)), n, m)
+      delta_temp <- matrix(Rlab::rbern(onesNM, 1/(1+delta_b_div_a)), n, m)
     }
     
     # update tau
@@ -298,7 +303,7 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
     res <- Y_minus_B_rep - tmp5
     un <- u + k/2
     vn <- apply((res)^2, 1, sum)/2 + v
-    tau_temp <- rgamma(n,un,vn)
+    tau_temp <- Rlab::rgamma(n,un,vn)
     
     
     # update

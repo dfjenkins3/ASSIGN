@@ -161,12 +161,12 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel, testLabe
   if (!is.null(trainingData)) {
     rownames(coef_train) <- colnames(processed.data$trainingData_sub)
     colnames(coef_train) <- pathName
-    write.csv(processed.data$S_matrix, file = "signature_gene_list_prior.csv")###moom added this to include the gene list and prior coefficient
-    write.csv(coef_train, file = "pathway_activity_trainingset.csv")
+    utils::write.csv(processed.data$S_matrix, file = "signature_gene_list_prior.csv")###moom added this to include the gene list and prior coefficient
+    utils::write.csv(coef_train, file = "pathway_activity_trainingset.csv")
   }
   rownames(coef_test) <- colnames(processed.data$testData_sub)
   colnames(coef_test) <- pathName
-  write.csv(coef_test, file = "pathway_activity_testset.csv")
+  utils::write.csv(coef_test, file = "pathway_activity_testset.csv")
   if (!is.null(trainingData)) {
     heatmap.train(diffGeneList = processed.data$diffGeneList, 
                   trainingData, trainingLabel)
@@ -179,17 +179,17 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel, testLabe
                      testLabel, Delta_cutoff = 0.95, coef_test, geneList)
     ####Added by moom####
     ##Evan please double check if this is informative and needed
-    pdf("Signature_convergence.pdf") 
-    plot(mcmc.chain.testData$S_mcmc)
+    grDevices::pdf("Signature_convergence.pdf") 
+    graphics::plot(mcmc.chain.testData$S_mcmc)
     abline(h=0,col="red")
-    dev.off()
+    invisible(grDevices::dev.off())
     ##
     dimnames(mcmc.pos.mean.testData$Delta_pos)=dimnames(processed.data$S_matrix)    
     deltas<-cbind(processed.data$S_matrix,processed.data$Delta_matrix,mcmc.pos.mean.testData$S_pos,mcmc.pos.mean.testData$Delta_pos)
     colnames(deltas)=c(paste("Prior change in expression",pathName,sep=":"),paste("Prior probability of inclusion",pathName,sep=":"),paste("Posterior change in expression",pathName,sep=":"),paste("Posterior probability of inclusion",pathName,sep=":"))
     delta_in=NULL
     for(i in 1:ncol(deltas)){delta_in[i]=(strsplit(colnames(deltas),":")[[i]][2])}
-    write.csv(round(deltas[,order(delta_in)],digits = 4),"posterior_delta.csv",quote=F)
+    utils::write.csv(round(deltas[,order(delta_in)],digits = 4),"posterior_delta.csv",quote=F)
     #####End: added by moom###
       }
   if (!is.null(trainingData)) {

@@ -23,11 +23,11 @@ data_prep_s2 <- function(geneList, anchorGenes, testData, theta0, theta1){
   colnames(S) <- names(geneList)
   
   S1 <- S[apply(S,1,sum)!=0,]
-  S2 <- runif(length(S1),0,1); dim(S2) <- dim(S1)
+  S2 <- stats::runif(length(S1),0,1); dim(S2) <- dim(S1)
   rownames(S2) <- rownames(S1); colnames(S2) <- colnames(S1)
   test <- testData[apply(S,1,sum)!=0,]
   
-  B <- runif(NROW(S1),0,1)
+  B <- stats::runif(NROW(S1),0,1)
   Pi_matrix <- as.matrix(ifelse(S1==0, theta0, theta1))
   
   #change the Pi_matrix values for the anchor genes to 1

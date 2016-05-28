@@ -105,7 +105,7 @@
 #' @export assign.mcmc
 assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE, sigma_sZero = 0.01, sigma_sNonZero = 1, p_beta = 0.01, sigma_bZero = 0.01, sigma_bNonZero = 1, alpha_tau = 1, beta_tau = 0.01, Bg_zeroPrior=TRUE, S_zeroPrior=FALSE, ECM = FALSE)
 {  
-  cat("Start Gibbs sampling...\n")
+  message("Start Gibbs sampling...")
   
   Y <- as.matrix(Y)
   n <- NROW(Y)
@@ -209,7 +209,7 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
   P_tau2[1, ] <- tau_temp	
 
   pb <- txtProgressBar(min=0, max=iter, width=80)
-  cat("| 0%                                  50%                                 100% |\n")
+  message("| 0%                                  50%                                 100% |")
   for (i in 2:iter) {
     setTxtProgressBar(pb, i)
     
@@ -320,6 +320,7 @@ assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE, ada
     P_kappa[i, , ] <- kappa_temp
     P_tau2[i, ] <- tau_temp
   }
+  close(pb)
   
   rtlist <- list(beta_mcmc = P_beta,  tau2_mcmc = P_tau2)
   if (adaptive_B == TRUE){

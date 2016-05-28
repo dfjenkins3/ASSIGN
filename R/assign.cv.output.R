@@ -64,7 +64,7 @@
 #' 
 #' @export assign.cv.output
 assign.cv.output <- function(processed.data, mcmc.pos.mean.trainingData, trainingData, trainingLabel, adaptive_B=FALSE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir){
-  cat("Outputing results...\n")
+  message("Outputing results...")
   
   if (mixture_beta){
     coef_train = mcmc.pos.mean.trainingData$kappa_pos

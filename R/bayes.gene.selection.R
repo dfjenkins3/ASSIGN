@@ -21,7 +21,7 @@ bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500, burn_in
   tau2_pos <- matrix(0, n, m)
   
   for (j in 1: m){
-    cat("Gene selection on", names(trainingLabel)[j+1], "pathway...\n")
+    message("Gene selection on ", names(trainingLabel)[j+1], " pathway...")
     Y <- dat[, c(bgPosB[j]:edPosB[j], bgPosS[j]:edPosS[j])]
     k <- NCOL(Y)
     k1 <- edPosB[j] - bgPosB[j] +1
@@ -41,7 +41,7 @@ bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500, burn_in
     PHI_Delta[1, ] <- rep(0, n)
     PHI_tau2[1, ] <- rep(u/v, n)
     pb <- txtProgressBar(min=0, max=iter, width=80)
-    cat("| 0%                                  50%                                 100% |\n")
+    message("| 0%                                  50%                                 100% |")
     for (i in 2:iter){
       setTxtProgressBar(pb, i)
       s_B_1 <- 1/(k * PHI_tau2[i-1, ]+ 1/sigma2^2)
@@ -65,13 +65,12 @@ bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500, burn_in
       PHI_tau2[i, ] <- rgamma(n, un, vn)
       
     }
-    
+    close(pb)
     B_pos[, j] <- apply(PHI_B[-c(1:burn_in), ], 2, mean)
     S_pos[, j] <- apply(PHI_S[-c(1:burn_in), ], 2, mean)
     r_pos[, j] <- apply(PHI_Delta[-c(1:burn_in), ], 2, mean)
     tau2_pos[, j] <- apply(PHI_tau2[-c(1:burn_in), ], 2, mean)
   }
-  
   
   diffGeneList <- vector("list")
   for (j in 1:m){

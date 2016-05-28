@@ -11,8 +11,8 @@ data_prep_s2 <- function(geneList, anchorGenes, testData, theta0, theta1){
   #Check for anchor Genes
   if(!is.null(anchorGenes)){
     for (j in 1:length(names(anchorGenes))){
-      #if an anchor gene is not in the diffGeneList
-      if(length(intersect(diffGeneList[[j]], anchorGenes[[j]])) != length(anchorGenes[[j]])){
+      #if an anchor gene is not in the geneList
+      if(length(intersect(geneList[[j]], anchorGenes[[j]])) != length(anchorGenes[[j]])){
         #FAIL with error message
         stop("All anchor genes must be listed in the geneList")
       }

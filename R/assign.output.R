@@ -71,7 +71,7 @@
 #' 
 #' @export assign.output
 assign.output <- function(processed.data, mcmc.pos.mean.testData, trainingData, testData, trainingLabel, testLabel, geneList, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir){
-  cat("Outputing results...\n")
+  message("Outputing results...")
   
   if (mixture_beta){
     coef_test = mcmc.pos.mean.testData$kappa_pos

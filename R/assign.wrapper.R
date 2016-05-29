@@ -115,7 +115,7 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel, testLabe
                                       trainingLabel, geneList, n_sigGene, theta0, theta1, pctUp=pctUp,
                                       geneselect_iter=geneselect_iter, geneselect_burn_in=geneselect_burn_in)
   if (!is.null(trainingData)) {
-    cat("Estimating model parameters in the training dataset...\n")
+    message("Estimating model parameters in the training dataset...")
     mcmc.chain.trainingData <- assign.mcmc(Y = processed.data$trainingData_sub,
                                            Bg = processed.data$B_vector, X = processed.data$S_matrix,
                                            Delta_prior_p = processed.data$Pi_matrix, iter = iter,
@@ -126,7 +126,7 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel, testLabe
                                                  adaptive_S = FALSE, mixture_beta = TRUE)
 
   }
-  cat("Estimating model parameters in the test dataset...\n")
+  message("Estimating model parameters in the test dataset...")
   mcmc.chain.testData <- assign.mcmc(Y = processed.data$testData_sub, 
                                      Bg = processed.data$B_vector, X = processed.data$S_matrix,
                                      Delta_prior_p = processed.data$Pi_matrix, iter = iter,
@@ -137,7 +137,7 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel, testLabe
                                            burn_in = burn_in, iter = iter, adaptive_B = adaptive_B, 
                                            adaptive_S = adaptive_S, mixture_beta = mixture_beta)
 
-  cat("Outputing results...\n")
+  message("Outputing results...")
   if (mixture_beta) {
     if (!is.null(trainingData)) {
       coef_train = mcmc.pos.mean.trainingData$kappa_pos

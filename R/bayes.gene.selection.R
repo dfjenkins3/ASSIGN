@@ -40,7 +40,7 @@ bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500, burn_in
     PHI_S[1, ] <- rep(0, n)
     PHI_Delta[1, ] <- rep(0, n)
     PHI_tau2[1, ] <- rep(u/v, n)
-    pb <- txtProgressBar(min=0, max=iter, width=80)
+    pb <- txtProgressBar(min=0, max=iter, width=80, file=stderr())
     message("| 0%                                  50%                                 100% |")
     for (i in 2:iter){
       setTxtProgressBar(pb, i)

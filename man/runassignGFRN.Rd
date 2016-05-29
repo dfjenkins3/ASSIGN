@@ -12,9 +12,9 @@ runassignGFRN(indata, run = c("akt", "bad", "egfr", "her2", "igf1r", "krasgv",
 \arguments{
 \item{indata}{The list of data frames from ComBat.step2}
 
-\item{run}{specifys the pathways to predict. The default NULL value will
+\item{run}{specifys the pathways to predict. The default list will
 cause all eight pathways to be run in serial. Specify a pathway ("akt",
-"bad", "egfr", etc.) to run that pathway only.}
+"bad", "egfr", etc.) or list of pathways to run those pathways only.}
 
 \item{optimized_geneList}{a list of custom optimized gene lists for the gfrn
 pathways either created manually or output by optimizeGFRN}

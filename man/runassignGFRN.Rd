@@ -4,9 +4,10 @@
 \alias{runassignGFRN}
 \title{Run optimized single pathway ASSIGN}
 \usage{
-runassignGFRN(indata, run = NULL, use_seed = TRUE, sigma_sZero = 0.05,
-  sigma_sNonZero = 0.5, S_zeroPrior = FALSE, iter = 1e+05,
-  burn_in = 50000)
+runassignGFRN(indata, run = c("akt", "bad", "egfr", "her2", "igf1r", "krasgv",
+  "krasqh", "raf"), optimized_geneList = NULL, use_seed = TRUE,
+  sigma_sZero = 0.05, sigma_sNonZero = 0.5, S_zeroPrior = FALSE,
+  iter = 1e+05, burn_in = 50000)
 }
 \arguments{
 \item{indata}{The list of data frames from ComBat.step2}
@@ -14,6 +15,9 @@ runassignGFRN(indata, run = NULL, use_seed = TRUE, sigma_sZero = 0.05,
 \item{run}{specifys the pathways to predict. The default NULL value will
 cause all eight pathways to be run in serial. Specify a pathway ("akt",
 "bad", "egfr", etc.) to run that pathway only.}
+
+\item{optimized_geneList}{a list of custom optimized gene lists for the gfrn
+pathways either created manually or output by optimizeGFRN}
 
 \item{use_seed}{a logical value indicating if you want to run the analysis
 using a set seed. This will make the result consistant between runs. The
@@ -32,11 +36,13 @@ follows a normal distribution with mean zero. The default is FALSE.}
 
 \item{iter}{The number of iterations in the MCMC. The default is 100000.}
 
-\item{burn_in}{The number of burn-in iterations. These iterations are discarded
-when computing the posterior means of the model parameters. The default is 50000.}
+\item{burn_in}{The number of burn-in iterations. These iterations are
+discarded when computing the posterior means of the model parameters. The
+default is 50000.}
 }
 \value{
-Data is output to the current working directory in a results directory.
+Data is output to the current working directory in a results
+directory.
 }
 \description{
 This function runs eight ASSIGN runs based on the pathway optimizations

@@ -37,151 +37,151 @@ runassignGFRN <- function(indata, run=NULL, use_seed=TRUE, sigma_sZero=0.05,
       set.seed(1234)
     }
     #AKT
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$gfp,indata$akt),
-                           testData=indata$test,
-                           anchorGenes=list(akt=c("AKT1")),
-                           trainingLabel=list(control=list(akt=1:12),akt=13:18),
-                           geneList=list(akt=geneLists$akt),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("akt_",length(geneLists$akt),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$gfp,indata$akt),
+                   testData=indata$test,
+                   anchorGenes=list(akt=c("AKT1")),
+                   trainingLabel=list(control=list(akt=1:12),akt=13:18),
+                   geneList=list(akt=gfrn_geneList$akt),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("akt_",length(gfrn_geneList$akt),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="bad"){
     if(use_seed){
       set.seed(1234)
     }
     #BAD
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$gfp,indata$bad),
-                           testData=indata$test,
-                           anchorGenes=list(bad=c("BAD")),
-                           trainingLabel=list(control=list(bad=1:12),bad=13:18),
-                           geneList=list(bad=geneLists$bad),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("bad_",length(geneLists$bad),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$gfp,indata$bad),
+                   testData=indata$test,
+                   anchorGenes=list(bad=c("BAD")),
+                   trainingLabel=list(control=list(bad=1:12),bad=13:18),
+                   geneList=list(bad=gfrn_geneList$bad),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("bad_",length(gfrn_geneList$bad),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="egfr"){
     if(use_seed){
       set.seed(1234)
     }
     #EGFR
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$egfr_gfp,indata$egfr),
-                           testData=indata$test,
-                           anchorGenes=list(egfr=c("EGFR")),
-                           trainingLabel=list(control=list(egfr=1:6),egfr=7:12),
-                           geneList=list(egfr=geneLists$egfr),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("egfr_",length(geneLists$egfr),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$egfr_gfp,indata$egfr),
+                   testData=indata$test,
+                   anchorGenes=list(egfr=c("EGFR")),
+                   trainingLabel=list(control=list(egfr=1:6),egfr=7:12),
+                   geneList=list(egfr=gfrn_geneList$egfr),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("egfr_",length(gfrn_geneList$egfr),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="her2"){
     if(use_seed){
       set.seed(1234)
     }
     #HER2
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$gfp,indata$her2),
-                           testData=indata$test,
-                           anchorGenes=list(her2=c("ERBB2")),
-                           trainingLabel=list(control=list(her2=1:12),her2=13:17),
-                           geneList=list(her2=geneLists$her2),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("her2_",length(geneLists$her2),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$gfp,indata$her2),
+                   testData=indata$test,
+                   anchorGenes=list(her2=c("ERBB2")),
+                   trainingLabel=list(control=list(her2=1:12),her2=13:17),
+                   geneList=list(her2=gfrn_geneList$her2),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("her2_",length(gfrn_geneList$her2),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="igf1r"){
     if(use_seed){
       set.seed(1234)
     }
     #IGF1R
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$gfp,indata$igf1r),
-                           testData=indata$test,
-                           anchorGenes=list(igf1r=c("IGF1R")),
-                           trainingLabel=list(control=list(igf1r=1:12),igf1r=13:18),
-                           geneList=list(igf1r=geneLists$igf1r),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("igf1r_",length(geneLists$igf1r),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$gfp,indata$igf1r),
+                   testData=indata$test,
+                   anchorGenes=list(igf1r=c("IGF1R")),
+                   trainingLabel=list(control=list(igf1r=1:12),igf1r=13:18),
+                   geneList=list(igf1r=gfrn_geneList$igf1r),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("igf1r_",length(gfrn_geneList$igf1r),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="krasgv"){
     if(use_seed){
       set.seed(1234)
     }
     #KRASGV
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$kras_gfp,indata$krasgv),
-                           testData=indata$test,
-                           anchorGenes=list(krasgv=c("KRAS")),
-                           trainingLabel=list(control=list(krasgv=1:9),krasgv=10:18),
-                           geneList=list(krasgv=geneLists$krasgv),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("krasgv_",length(geneLists$krasgv),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$kras_gfp,indata$krasgv),
+                   testData=indata$test,
+                   anchorGenes=list(krasgv=c("KRAS")),
+                   trainingLabel=list(control=list(krasgv=1:9),krasgv=10:18),
+                   geneList=list(krasgv=gfrn_geneList$krasgv),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("krasgv_",length(gfrn_geneList$krasgv),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="krasqh"){
     if(use_seed){
       set.seed(1234)
     }
     #KRASQH
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$kras_gfp,indata$krasqh),
-                           testData=indata$test,
-                           anchorGenes=list(krasqh=c("KRAS")),
-                           trainingLabel=list(control=list(krasqh=1:9),krasqh=10:18),
-                           geneList=list(krasqh=geneLists$krasqh),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("krasqh_",length(geneLists$krasqh),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$kras_gfp,indata$krasqh),
+                   testData=indata$test,
+                   anchorGenes=list(krasqh=c("KRAS")),
+                   trainingLabel=list(control=list(krasqh=1:9),krasqh=10:18),
+                   geneList=list(krasqh=gfrn_geneList$krasqh),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("krasqh_",length(gfrn_geneList$krasqh),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
   if(is.null(run) || run=="raf"){
     if(use_seed){
       set.seed(1234)
     }
     #RAF
-    ASSIGN::assign.wrapper(trainingData=cbind(indata$gfp,indata$raf),
-                           testData=indata$test,
-                           anchorGenes=list(raf=c("RAF1")),
-                           trainingLabel=list(control=list(raf=1:12),raf=13:18),
-                           geneList=list(raf=geneLists$raf),
-                           n_sigGene=NULL,
-                           adaptive_B=TRUE,
-                           adaptive_S=TRUE,
-                           mixture_beta=FALSE,
-                           S_zeroPrior=S_zeroPrior,
-                           outputDir=paste("raf_",length(geneLists$raf),"_gene_list", sep=""),
-                           sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
-                           iter=iter, burn_in=burn_in)
+    assign.wrapper(trainingData=cbind(indata$gfp,indata$raf),
+                   testData=indata$test,
+                   anchorGenes=list(raf=c("RAF1")),
+                   trainingLabel=list(control=list(raf=1:12),raf=13:18),
+                   geneList=list(raf=gfrn_geneList$raf),
+                   n_sigGene=NULL,
+                   adaptive_B=TRUE,
+                   adaptive_S=TRUE,
+                   mixture_beta=FALSE,
+                   S_zeroPrior=S_zeroPrior,
+                   outputDir=paste("raf_",length(gfrn_geneList$raf),"_gene_list", sep=""),
+                   sigma_sZero=sigma_sZero, sigma_sNonZero=sigma_sNonZero,
+                   iter=iter, burn_in=burn_in)
   }
 }

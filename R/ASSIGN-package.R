@@ -63,7 +63,7 @@ NULL
 #' the bayesian gene selection step of ASSIGN, which will decrease the amount of
 #' time it takes to run ASSIGN.
 #'
-#' @name gfrn_geneLists
+#' @name gfrn_geneList
 #' @docType data
 #' @format List of gene lists for akt, bad, egfr, her2, igf1r, krasgv, krasqh,
 #' and raf

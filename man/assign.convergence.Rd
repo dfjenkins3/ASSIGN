@@ -55,8 +55,9 @@ whichPath=k.
 
 \dontrun{
 # check the 10th gene in the 1st pathway for the convergency
-trace.plot <- assign.convergence(test=mcmc.chain, burn_in=0, iter=2000, parameter="S", 
-whichGene=10, whichSample=NA, whichPath=1)
+trace.plot <- assign.convergence(test=mcmc.chain, burn_in=0, iter=2000,
+                                 parameter="S", whichGene=10, whichSample=NA,
+                                 whichPath=1)
 }
 
 }

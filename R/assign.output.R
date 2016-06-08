@@ -70,7 +70,10 @@
 #' geneList=NULL, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir=tempdir)
 #' 
 #' @export assign.output
-assign.output <- function(processed.data, mcmc.pos.mean.testData, trainingData, testData, trainingLabel, testLabel, geneList, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir){
+assign.output <- function(processed.data, mcmc.pos.mean.testData, trainingData,
+                          testData, trainingLabel, testLabel, geneList,
+                          adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE,
+                          outputDir){
   message("Outputing results...")
   
   if (mixture_beta){
@@ -94,11 +97,16 @@ assign.output <- function(processed.data, mcmc.pos.mean.testData, trainingData, 
   
   #heatmaps of each pathway
   if (!is.null(trainingData) & !is.null(trainingLabel)){
-    heatmap.train(diffGeneList=processed.data$diffGeneList, trainingData, trainingLabel)
+    heatmap.train(diffGeneList=processed.data$diffGeneList, trainingData,
+                  trainingLabel)
   }
-  heatmap.test.prior(diffGeneList=processed.data$diffGeneList, testData, trainingLabel,testLabel, coef_test, geneList)
+  heatmap.test.prior(diffGeneList=processed.data$diffGeneList, testData,
+                     trainingLabel, testLabel, coef_test, geneList)
   if (adaptive_S){
-    heatmap.test.pos(testData=processed.data$testData_sub, Delta_pos = mcmc.pos.mean.testData$Delta_pos, trainingLabel, testLabel, Delta_cutoff = 0.95,coef_test, geneList)
+    heatmap.test.pos(testData=processed.data$testData_sub,
+                     Delta_pos = mcmc.pos.mean.testData$Delta_pos,
+                     trainingLabel, testLabel, Delta_cutoff = 0.95, 
+                     coef_test, geneList)
   }  
   
   #provide test labels for model validation

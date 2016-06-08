@@ -99,31 +99,44 @@
 #' iter=20, burn_in=10)
 #' 
 #' @export assign.wrapper
-assign.wrapper<-function (trainingData = NULL, testData, trainingLabel, testLabel = NULL,
-          geneList = NULL, anchorGenes = NULL, excludeGenes = NULL, n_sigGene = NA,
-          adaptive_B = TRUE, adaptive_S = FALSE, mixture_beta = TRUE, outputDir, p_beta = 0.01,
-          theta0 = 0.05, theta1 = 0.9, iter = 2000, burn_in = 1000, sigma_sZero = 0.01,
-          sigma_sNonZero = 1, S_zeroPrior=FALSE, pctUp=0.5, geneselect_iter=500, geneselect_burn_in=100)
-{
+assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
+                          testLabel = NULL, geneList = NULL, anchorGenes = NULL,
+                          excludeGenes = NULL, n_sigGene = NA,
+                          adaptive_B = TRUE, adaptive_S = FALSE,
+                          mixture_beta = TRUE, outputDir, p_beta = 0.01,
+                          theta0 = 0.05, theta1 = 0.9, iter = 2000,
+                          burn_in = 1000, sigma_sZero = 0.01,
+                          sigma_sNonZero = 1, S_zeroPrior=FALSE, pctUp=0.5,
+                          geneselect_iter=500, geneselect_burn_in=100){
   if (is.null(geneList)) {
     pathName <- names(trainingLabel)[-1]
   }
   else {
     pathName <- names(geneList)
   }
-  processed.data <- assign.preprocess(trainingData, testData, anchorGenes, excludeGenes,
-                                      trainingLabel, geneList, n_sigGene, theta0, theta1, pctUp=pctUp,
-                                      geneselect_iter=geneselect_iter, geneselect_burn_in=geneselect_burn_in)
+  processed.data <- assign.preprocess(trainingData, testData, anchorGenes,
+                                      excludeGenes, trainingLabel, geneList,
+                                      n_sigGene, theta0, theta1, pctUp=pctUp,
+                                      geneselect_iter=geneselect_iter,
+                                      geneselect_burn_in=geneselect_burn_in)
   if (!is.null(trainingData)) {
     message("Estimating model parameters in the training dataset...")
     mcmc.chain.trainingData <- assign.mcmc(Y = processed.data$trainingData_sub,
-                                           Bg = processed.data$B_vector, X = processed.data$S_matrix,
-                                           Delta_prior_p = processed.data$Pi_matrix, iter = iter,
-                                           sigma_sZero = sigma_sZero, sigma_sNonZero = sigma_sNonZero, S_zeroPrior=S_zeroPrior,
-                                           adaptive_B = FALSE, adaptive_S = FALSE, mixture_beta = TRUE)
+                                           Bg = processed.data$B_vector,
+                                           X = processed.data$S_matrix,
+                                           Delta_prior_p = processed.data$Pi_matrix,
+                                           iter = iter,
+                                           sigma_sZero = sigma_sZero,
+                                           sigma_sNonZero = sigma_sNonZero,
+                                           S_zeroPrior=S_zeroPrior,
+                                           adaptive_B = FALSE,
+                                           adaptive_S = FALSE,
+                                           mixture_beta = TRUE)
     mcmc.pos.mean.trainingData <- assign.summary(test = mcmc.chain.trainingData, 
-                                                 burn_in = burn_in, iter = iter, adaptive_B = FALSE, 
-                                                 adaptive_S = FALSE, mixture_beta = TRUE)
+                                                 burn_in = burn_in, iter = iter,
+                                                 adaptive_B = FALSE,
+                                                 adaptive_S = FALSE,
+                                                 mixture_beta = TRUE)
 
   }
   message("Estimating model parameters in the test dataset...")

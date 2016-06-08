@@ -21,6 +21,10 @@ heatmap.test.pos <- function(testData, Delta_pos, trainingLabel, testLabel=NULL,
   for (i in 1:nPath){
     tmp <- match(diffGeneList[[i]], row.names(testData))
     path <- testData[tmp, ]
+    #do not print heatmaps if there is 1 or fewer genes in the heatmap
+    if(nrow(path) <= 1){
+      next
+    }
     if (!is.null(testLabel)){
       stats::heatmap(as.matrix(path[,order(coef_test[,i])]),Colv=NA,scale="row",
                      ColSideColors=as.character(cc[order(coef_test[,i])]),

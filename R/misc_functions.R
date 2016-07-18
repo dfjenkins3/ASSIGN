@@ -55,3 +55,25 @@ pcaplot<-function(mat,sub,center=T,scale=T){
     }
   }
 }
+
+#' Gather the ASSIGN results in a specific directory
+#'
+#' @return A data frame of ASSIGN predictions from each run in the directory
+#' @export pcaplot
+#'
+gather_assign_results <- function(){
+  curr_files <- list.files(pattern="pathway_activity_testset.csv", recursive = T)
+  results_df <- data.frame()
+  for (i in curr_files){
+    curr <- read.csv(i, header=T, row.names=1)
+    colnames(curr) <- strsplit(i, split="/")[[1]][1]
+    if(ncol(results_df) ==0){
+      results_df <- curr
+    }
+    else{
+      results_df <- cbind(results_df, curr)
+    }
+  }
+  rownames(results_df) <- substr(rownames(results_df),1,14)
+  return(results_df)
+}

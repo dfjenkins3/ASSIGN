@@ -59,7 +59,8 @@ pcaplot<-function(mat,sub,center=T,scale=T){
 #' Gather the ASSIGN results in a specific directory
 #'
 #' @return A data frame of ASSIGN predictions from each run in the directory
-#' @export pcaplot
+#' 
+#' @export gather_assign_results
 #'
 gather_assign_results <- function(){
   curr_files <- list.files(pattern="pathway_activity_testset.csv", recursive = T)

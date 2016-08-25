@@ -33,7 +33,8 @@ optimize them based on the correlation data matrix.}
 
 \item{keep_optimized_only}{a logical value indicating if you want to keep
 all of the ASSIGN run results, or only the runs that provided the optimum
-ASSIGN correlations}
+ASSIGN correlations. This will delete all directories in the current working
+directory that match the pattern "_gene_list". The default is FALSE}
 
 \item{pathway_lengths}{The gene list lengths that should be run. The default
 is the 20 pathway lengths that were used in the paper, but this list can
@@ -45,8 +46,8 @@ be customized to which pathway lengths you are willing to accept}
 discarded when computing the posterior means of the model parameters.}
 }
 \value{
-ASSIGN runs and correlation data are output to the current working
-directory. This function returns the optimized gene lists that you can use
+ASSIGN runs are output to the current workingdirectory. This function
+returns the correlation data and the optimized gene lists that you can use
 with runassignGFRN to try these lists on other data.
 }
 \description{

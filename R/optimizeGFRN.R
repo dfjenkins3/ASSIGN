@@ -24,7 +24,8 @@
 #' optimize them based on the correlation data matrix.
 #' @param keep_optimized_only a logical value indicating if you want to keep
 #' all of the ASSIGN run results, or only the runs that provided the optimum
-#' ASSIGN correlations
+#' ASSIGN correlations. This will delete all directories in the current working
+#' directory that match the pattern "_gene_list". The default is FALSE
 #' @param pathway_lengths The gene list lengths that should be run. The default
 #' is the 20 pathway lengths that were used in the paper, but this list can
 #' be customized to which pathway lengths you are willing to accept
@@ -32,8 +33,8 @@
 #' @param burn_in The number of burn-in iterations. These iterations are
 #' discarded when computing the posterior means of the model parameters.
 #' 
-#' @return ASSIGN runs and correlation data are output to the current working
-#' directory. This function returns the optimized gene lists that you can use
+#' @return ASSIGN runs are output to the current workingdirectory. This function
+#' returns the correlation data and the optimized gene lists that you can use
 #' with runassignGFRN to try these lists on other data.
 #'
 #' @export optimizeGFRN
@@ -45,6 +46,7 @@ optimizeGFRN <- function(indata, correlation, correlationList,
                          pathway_lengths=c(seq(5,20,5), seq(25,275,25),
                                            seq(300,500,50)), iter=100000,
                          burn_in=50000) {
+  # run the pathway predictions
   if(!(correlation_only)){
     for (curr_path in run){
       for (curr_len in pathway_lengths){
@@ -56,4 +58,70 @@ optimizeGFRN <- function(indata, correlation, correlationList,
       }
     }
   }
+  
+  #gather the results into a matrix
+  results <- ASSIGN::gather_assign_results()
+  
+  #check the rownames, warnings if there are extras
+  if(sum(!(rownames(results) %in% rownames(correlation))) != 0){
+    warning(sum(!(rownames(results) %in% rownames(correlation))),
+            " out of ",length(rownames(results)),
+            " samples in input data not in correlation data:\n",
+            paste(rownames(results)[!(rownames(results) %in% rownames(correlation))], collapse=", "),
+            "\nThese samples will be removed from the correlation results.")
+  }
+  if(sum(!(rownames(correlation) %in% rownames(results))) != 0){
+    warning(sum(!(rownames(correlation) %in% rownames(results))),
+            " out of ",length(rownames(correlation)),
+            " samples in correlation data not in input data:\n",
+            paste(rownames(correlation)[!(rownames(correlation) %in% rownames(results))], collapse=", "),
+            "\nThese samples will be removed from the correlation results.")
+  }
+  
+  combined <- ASSIGN::merge_drop(results, correlation)
+  results <- combined[,1:length(colnames(results))]
+  correlation <- combined[,(length(colnames(results))+1):(length(colnames(results))+length(colnames(correlation)))]
+  
+  #correlate the specific columns with the pathways according to the
+  #correlationList, optimize the correlation and get the gene list
+  correlation_results <- list()
+  optimized_path <- list()
+  optimizedGeneList <- list()
+  for (curr_path in names(correlationList)){
+    cor_column_idx <- which(colnames(correlation) %in% correlationList[[curr_path]])
+    run_column_idx <- grep(paste("^",curr_path,"_", sep=""), colnames(results))
+    #for each column in results
+    cor_mat <- matrix(0,
+                      nrow=length(run_column_idx),
+                      ncol=length(cor_column_idx),
+                      dimnames=list(colnames(results)[run_column_idx],
+                                    colnames(correlation)[cor_column_idx]))
+    for (cor_column in cor_column_idx){
+      for(run_column in run_column_idx){
+        temp <- cor.test(correlation[,cor_column], results[,run_column], use="pairwise", method="spearman")
+        cor_mat[colnames(results)[run_column],colnames(correlation)[cor_column]] <- temp$estimate
+      }
+    }
+    correlation_results[[curr_path]] <- cor_mat
+
+    #get the result that has the optimized path
+    optimized_path[[curr_path]] <- names(which.max(rowMeans(correlation_results[[curr_path]])))
+    
+    #get the gene list for the optimized path
+    optimum_length <- as.numeric(strsplit(optimized_path[[curr_path]], split = "_")[[1]][2])
+    optimizedGeneList[[curr_path]] <- c(gfrn_geneList[[paste(curr_path,"up",sep="_")]][1:floor(optimum_length/2)],
+                                        gfrn_geneList[[paste(curr_path,"down",sep="_")]][1:ceiling(optimum_length/2)])
+  }
+
+  #delete the non-optimal outputs if keep_optimized_only is set
+  if(keep_optimized_only){
+    message("Deleting the results that are not optimium")
+    unlink(dir(pattern="gene_list")[!(dir(pattern="_gene_list") %in% as.vector(unlist(optimized_path)))], recursive = T)
+  }
+  
+  #return the optimized gene list and the correlation matrices
+  outlist <- list()
+  outlist[["optimizedGeneList"]] <- optimizedGeneList
+  outlist[["correlationResults"]] <- correlation_results
+  return(outlist)
 }

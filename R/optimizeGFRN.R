@@ -53,6 +53,7 @@ optimizeGFRN <- function(indata, correlation, correlationList,
         geneList <- list()
         geneList[[curr_path]] <- c(gfrn_geneList[[paste(curr_path,"up",sep="_")]][1:floor(curr_len/2)],
                                    gfrn_geneList[[paste(curr_path,"down",sep="_")]][1:ceiling(curr_len/2)])
+        message("Running: ", curr_path, " ", curr_len, " genes")
         runassignGFRN(indata, run=curr_path, optimized_geneList=geneList,
                       iter=iter, burn_in=burn_in)   
       }

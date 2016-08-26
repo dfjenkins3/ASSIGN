@@ -28,5 +28,6 @@ Imports:
     utils
 biocViews: Software, GeneExpression, Pathways, Bayesian
 Suggests:
-    testthat
+    testthat,
+    BiocStyle
 RoxygenNote: 5.0.1

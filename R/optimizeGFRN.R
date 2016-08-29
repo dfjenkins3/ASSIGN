@@ -36,6 +36,26 @@
 #' @return ASSIGN runs are output to the current workingdirectory. This function
 #' returns the correlation data and the optimized gene lists that you can use
 #' with runassignGFRN to try these lists on other data.
+#' 
+#' @examples
+#' testData <- read.table("../icbp_Rsubread_tpmlog.txt", sep='\t', row.names=1, header=1)
+#' corData <- read.table("proteomics.txt", sep='\t', row.names=1, header=1)
+#' corData$negAkt <- -1 * corData$Akt
+#' corData$negPDK1 <- -1 * corData$PDK1
+#' corData$negPDK1p241 <- -1 * corData$PDK1p241
+#'
+#' corList <- list(akt=c("Akt","PDK1","PDK1p241"),
+#'                 bad=c("negAkt","negPDK1","negPDK1p241"),
+#'                 egfr=c("EGFR","EGFRp1068"),
+#'                 her2=c("HER2","HER2p1248"),
+#'                 igf1r=c("IGFR1","PDK1","PDK1p241"),
+#'                 krasgv=c("EGFR","EGFRp1068"),
+#'                 krasqh=c("EGFR","EGFRp1068"),
+#'                 raf=c("MEK1","PKCalphap657","PKCalpha"))
+#' 
+#' combat.data <- ComBat.step2(testData, pcaPlots = TRUE)
+#'
+#' optimization_results <- optimizeGFRN(combat.data, corData, corList)
 #'
 #' @export optimizeGFRN
 #'
@@ -46,6 +66,11 @@ optimizeGFRN <- function(indata, correlation, correlationList,
                          pathway_lengths=c(seq(5,20,5), seq(25,275,25),
                                            seq(300,500,50)), iter=100000,
                          burn_in=50000) {
+  #check that correlationList and run list are identical
+  if(!identical(names(correlationList), run)){
+    stop("Make sure the run list and correlationList list names are identical and in the same order")
+  }
+  
   # run the pathway predictions
   if(!(correlation_only)){
     for (curr_path in run){
@@ -90,6 +115,9 @@ optimizeGFRN <- function(indata, correlation, correlationList,
   optimizedGeneList <- list()
   for (curr_path in names(correlationList)){
     cor_column_idx <- which(colnames(correlation) %in% correlationList[[curr_path]])
+    if (length(cor_column_idx) != length(correlationList[[curr_path]])){
+      stop("correlationList columns do not match columns found in correlation data. Check the correlation column names")
+    }
     run_column_idx <- grep(paste("^",curr_path,"_", sep=""), colnames(results))
     #for each column in results
     cor_mat <- matrix(0,

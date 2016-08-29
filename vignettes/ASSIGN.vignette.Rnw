@@ -57,9 +57,9 @@ Some distinctive features of \Rpackage{ASSIGN} are:
   \item \textbf{Regularization of signature strength estimates}:
   \Rpackage{ASSIGN} regularizes the signature strength coefficients using a
   Bayesian ridge regression formulation by shrinking the strength of the
-  irrelevant signature genes toward zero. The parameter regularization constrains the
-  pathway signature to a small group of genes, thus, making the results more
-  biologically interpretable.
+  irrelevant signature genes toward zero. The parameter regularization
+  constrains the pathway signature to a small group of genes, thus, making the
+  results more biologically interpretable.
 \end{enumerate}
 
 \section{How to use the \Rpackage{ASSIGN} package}
@@ -88,15 +88,15 @@ training dataset is a G (Number of genomic measures) x N (number of samples in
 pathway perturbation experiments) matrix, including five oncogenic pathways:
 B-Catenin, E2F3, MYC, RAS, and SRC pathways in this example. The training data
 labels denote the column indices of control and experimental samples for each
-purturbation experiment. For example, we specify the column indices of the 10 RAS
-control samples to be 1:10, and column indices of 10 RAS activated samples to be
-39:48. The test dataset is a G (Number of genomic measures) x N (number of
+purturbation experiment. For example, we specify the column indices of the 10
+RAS control samples to be 1:10, and column indices of 10 RAS activated samples
+to be 39:48. The test dataset is a G (Number of genomic measures) x N (number of
 patient samples) matrix. The test data labels denote the classes of the N test
-samples. In our example, test samples 1-53 are adenocarcinoma and samples
-54-111 are squamous cell carcinoma. We specify "Adeno" and "Squamous" in the
-vector of test data labels. Note that the test data labels are optional.
-\Rpackage{ASSIGN} outputs additional validation plots to evaluate classification
-accuracy when test data labels are provided.
+samples. In our example, test samples 1-53 are adenocarcinoma and samples 54-111
+are squamous cell carcinoma. We specify "Adeno" and "Squamous" in the vector of
+test data labels. Note that the test data labels are optional. \Rpackage{ASSIGN}
+outputs additional validation plots to evaluate classification accuracy when
+test data labels are provided.
 
 <<datasets-and-labels,eval=FALSE>>=
 data(trainingData1)
@@ -276,8 +276,8 @@ dataset (trainingData\_sub) and test dataset (testData\_sub) as well as the
 prior parameters for the background vector (B\_vector), signature matrix
 (S\_matrix) and the probability signature matrix (Pi\_matrix) and differential
 expressed gene lists of each pathways (diffGeneList). The details of the
-assign.preprocess output are described in the Value section of the manual page
-of \Rfunction{assign.preprocess} function. The output data of
+\Rfunction{assign.preprocess} output are described in the Value section of the
+manual page of \Rfunction{assign.preprocess} function. The output data of
 \Rfunction{assign.preprocess} function are used as the input data of the
 \Rfunction{assign.mcmc} function.
 
@@ -411,29 +411,55 @@ assign.output(processed.data=processed.data,
 
 \subsection{Anchor Gene Lists and Exclude Gene Lists}
 
-The ASSIGN package allows a signature to be adapted to fit other biological
-contexts, reducing the contribution of specific genes in the signature to better
-match heterogeneity observed in the test dataset. Occasionally, adapting a
-signature may reduce the importance of key signature genes. For example, if a
-signature is created by overexpressing an oncogenic gene in a cell line, but
-during the adaptation step, ASSIGN reduces the importance of that key gene, the
-quality of the ASSIGN predictions may be reduced. Alternatively, if a gene in
-the signature is associated with some other heterogeneity in the data, such as
-smoking status, ASSIGN may adapt to differences in that gene, rather than the
-actual desired signature activity predictions. To this end, we have added the
-ability to provide a list of key genes to anchor in the signature, and genes to
-exclude from the signature. ASSIGN accomplishes this by setting the probability
-of inclusion into the signature to one for anchor genes, and zero for exclude
-genes. The change in expression values can still adapt, increasing or reducing
-the fold change associated with each gene in the signature, but the anchor genes
-will always contribute to the final signature, and the exclude genes will not.
+The \Rpackage{ASSIGN} package allows a signature to be adapted to fit other
+biological contexts, reducing the contribution of specific genes in the
+signature to better match heterogeneity observed in the test dataset.
+Occasionally, adapting a signature may reduce the importance of key signature
+genes. For example, if a signature is created by overexpressing an oncogenic
+gene in a cell line, but during the adaptation step, \Rpackage{ASSIGN} reduces
+the importance of that key gene, the quality of the \Rpackage{ASSIGN}
+predictions may be reduced. Alternatively, if a gene in the signature is
+associated with some other heterogeneity in the data, such as smoking status,
+\Rpackage{ASSIGN} may adapt to differences in that gene, rather than the actual
+desired signature activity predictions. To this end, we have added the ability
+to provide a list of key genes to anchor in the signature, and genes to exclude
+from the signature. \Rpackage{ASSIGN} accomplishes this by setting the
+probability of inclusion into the signature to one for anchor genes, and zero
+for exclude genes. The change in expression values can still adapt, increasing
+or reducing the fold change associated with each gene in the signature, but the
+anchor genes will always contribute to the final signature, and the exclude
+genes will not.
+
+<<anchor-exclude-example,eval=FALSE,results=hide>>=
+dir.create(file.path(tempdir,"anchor_exclude_example"))
+
+anchorList = list(bcat="224321_at",
+                  e2f3="202589_at",
+                  myc="221891_x_at",
+                  ras="201820_at",
+                  src="224567_x_at")
+excludeList = list(bcat="1555340_x_at",
+                   e2f3="1555340_x_at",
+                   myc="1555340_x_at",
+                   ras="204748_at",
+                   src="1555339_at")
+
+assign.wrapper(trainingData=trainingData1, testData=testData1,
+               trainingLabel=trainingLabel1, testLabel=NULL,
+               geneList=geneList1, n_sigGene=NULL, adaptive_B=TRUE,
+               adaptive_S=TRUE, mixture_beta=TRUE,
+               outputDir=file.path(tempdir,"anchor_exclude_example"),
+               anchorGenes=anchorList, excludeGenes=excludeList,
+               iter=2000, burn_in=1000)
+@
 
 \subsection{Fraction of Upregulated Genes}
 
-By default, ASSIGN bayesian gene selection chooses the signature genes with an
-equal fraction of genes that increase with pathway activity and genes that
-decrease with pathway activity. Use the pctUp parameter to modify this fraction.
-Set pctUP to NULL to select the most significant genes, regardless of direction.
+By default, \Rpackage{ASSIGN} bayesian gene selection chooses the signature
+genes with an equal fraction of genes that increase with pathway activity and
+genes that decrease with pathway activity. Use the pctUp parameter to modify
+this fraction. Set pctUP to NULL to select the most significant genes,
+regardless of direction.
 
 \section{Citing \Rpackage{ASSIGN}}
 

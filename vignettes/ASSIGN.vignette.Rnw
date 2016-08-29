@@ -88,7 +88,7 @@ training dataset is a G (Number of genomic measures) x N (number of samples in
 pathway perturbation experiments) matrix, including five oncogenic pathways:
 B-Catenin, E2F3, MYC, RAS, and SRC pathways in this example. The training data
 labels denote the column indices of control and experimental samples for each
-purturbation experiment. For example, we specify the column indices of the 10
+perturbation experiment. For example, we specify the column indices of the 10
 RAS control samples to be 1:10, and column indices of 10 RAS activated samples
 to be 39:48. The test dataset is a G (Number of genomic measures) x N (number of
 patient samples) matrix. The test data labels denote the classes of the N test
@@ -166,7 +166,7 @@ Finally, if the \Rfunarg{testLabel} argument is not NULL,
 
 Here we illustrate how to run \Rfunction{assign.wrapper} function with three
 examples. To start, run the code in section~\ref{subsec:example_data} to create
-a temporary dirctory "tempdir" and load training and test datasets. The
+a temporary directory "tempdir" and load training and test datasets. The
 individual parameters are described in detail in
 section~\ref{subsec:step_by_step} and in the \Rpackage{ASSIGN} reference
 manual.
@@ -243,7 +243,7 @@ processed.data <- assign.preprocess(trainingData=trainingData1,
 Alternatively, the users can have both the training data and the
 curated/predetermined pathway signatures. Some genes in the curated pathway
 signatures, although not significantly differently expressed, need to be
-included for the prediction purpose. In this case we specify
+included for the prediction purpose. In this case, we specify
 \Rfunarg{trainingData} and \Rfunarg{geneList} when BOTH of the training dataset
 and predetermined signature gene list are available.
 
@@ -258,7 +258,7 @@ processed.data <- assign.preprocess(trainingData=trainingData1,
 
 In some cases, the expression profiles (training dataset) is unavailable. Only
 the knowledge-based gene list or gene list from the joint knowledge of some
-prior profiling experiments is available. In this case we specify
+prior profiling experiments is available. In this case, we specify
 \Rfunarg{geneList} and leave the \Rfunarg{trainingData} and
 \Rfunarg{trainingLabel} as default NULL.
 
@@ -283,7 +283,7 @@ manual page of \Rfunction{assign.preprocess} function. The output data of
 
 \subsubsection{\Rfunction{assign.mcmc}}
 
-For the \Rfunction{assign.mcmc} function, Y, Bg and X are specified as the
+For the \Rfunction{assign.mcmc} function, Y, Bg, and X are specified as the
 output of the \Rfunction{assign.preprocess} function. The \Rfunarg{adaptive\_B}
 (adaptive background), \Rfunarg{adaptive\_S} (adaptive signature) and
 \Rfunarg{mixture\_beta} (regularization of signature strength) can be specified
@@ -460,6 +460,69 @@ genes with an equal fraction of genes that increase with pathway activity and
 genes that decrease with pathway activity. Use the pctUp parameter to modify
 this fraction. Set pctUP to NULL to select the most significant genes,
 regardless of direction.
+
+\section{GFRN Optimization Procedure}
+
+When running \Rpackage{ASSIGN}, the number of genes in the gene list can affect
+the predictions that \Rpackage{ASSIGN} produces, but it is not always clear how
+long the gene list should be. Included within \Rpackage{ASSIGN} is the
+optimization procedure used in the publication "Activity of distinct growth
+factor receptor network components in breast tumors uncovers two biologically
+relevant subtypes." The function allows you to optimize the gene list lengths
+for the pathways included in the paper using your own correlation data and gene
+list lengths. This function runs \Rpackage{ASSIGN} pathway prediction on various
+gene list lengths to find the optimum gene list length for the GFRN pathways by
+correlating the \Rpackage{ASSIGN} predictions to a matrix of correlation data
+that you provide. This function takes a long time to run because you are running
+\Rpackage{ASSIGN} many times on many pathways, so I recommend parallelizing by
+pathway or running the \Rpackage{ASSIGN} predictions first (long and
+parallelizable) and then running the correlation step (quick) separately.
+
+\subsection{Example Optimization Procedure}
+
+The following example optimizes the pathway length for the AKT pathway based on
+correlating \Rpackage{ASSIGN} predictions with proteomics data. First, read in
+the test data that you want to predict using \Rpackage{ASSIGN} and the
+proteomics data that will be used for correlation:
+
+<<anchor-exclude-example1,eval=FALSE,results=hide>>=
+dir.create(file.path(tempdir,"optimization_example"))
+setwd(file.path(tempdir,"optimization_example"))
+
+testData <- read.table("../icbp_Rsubread_tpmlog.txt", sep='\t',
+                       row.names=1, header=1)
+
+corData <- read.table("proteomics.txt", sep='\t', row.names=1, header=1)
+@
+
+Next, create a list of data used for correlation. The list should contain a
+vector of column names from the correlation data from for each of the pathways
+that are being optimized. The gene list length that has the largest average
+correlation for the columns in the correlation list will be the optimized gene
+list.
+
+<<anchor-exclude-example2,eval=FALSE,results=hide>>=
+#this is a list of pathways and columns in the correlation data that will
+#be used for correlation
+corList <- list(akt=c("Akt","PDK1","PDK1p241"))
+@
+
+Finally, run the ComBat batch correction procedure and run the
+\Rfunarg{optimizeGFRN} function:
+
+<<anchor-exclude-example3,eval=FALSE,results=hide>>=
+#run the batch correction procedure between the test and training data
+combat.data <- ComBat.step2(testData, pcaPlots = TRUE)
+
+#run the default optimization procedure
+optimization_results <- optimizeGFRN(combat.data, corData, corList, run="akt")
+@
+
+\Rpackage{ASSIGN} will output the results for each gene list length in the
+current working directory. The \Rfunarg{optimizeGFRN} function returns a list of
+optimized gene lists which can be used on other datasets and correlation
+results. Additional options and documentation is available in the
+\Rfunarg{optimizeGFRN} function documentation.
 
 \section{Citing \Rpackage{ASSIGN}}
 

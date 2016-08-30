@@ -60,8 +60,11 @@ ASSIGN predictions first (long and parallelizable) and then running the
 correlation step (quick) separately.
 }
 \examples{
-testData <- read.table("../icbp_Rsubread_tpmlog.txt", sep='\\t', row.names=1, header=1)
-corData <- read.table("proteomics.txt", sep='\\t', row.names=1, header=1)
+\dontrun{
+testData <- read.table("https://dl.dropboxusercontent.com/u/62447/ASSIGN/icbp_Rsubread_tpmlog.txt",
+                       sep='\\t', row.names=1, header=1)
+corData <- read.table("https://dl.dropboxusercontent.com/u/62447/ASSIGN/proteomics.txt",
+                      sep='\\t', row.names=1, header=1)
 corData$negAkt <- -1 * corData$Akt
 corData$negPDK1 <- -1 * corData$PDK1
 corData$negPDK1p241 <- -1 * corData$PDK1p241
@@ -78,6 +81,7 @@ corList <- list(akt=c("Akt","PDK1","PDK1p241"),
 combat.data <- ComBat.step2(testData, pcaPlots = TRUE)
 
 optimization_results <- optimizeGFRN(combat.data, corData, corList)
+}
 
 }
 

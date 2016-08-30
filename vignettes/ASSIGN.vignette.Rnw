@@ -488,10 +488,10 @@ data (e.g. proteomics data) that will be used for correlation:
 dir.create(file.path(tempdir, "optimization_example"))
 setwd(file.path(tempdir, "optimization_example"))
 
-testData <- read.table("icbp_Rsubread_tpmlog.txt", sep='\t',
+testData <- read.table("https://dl.dropboxusercontent.com/u/62447/ASSIGN/icbp_Rsubread_tpmlog.txt", sep='\t',
                        row.names=1, header=1)
 
-corData <- read.table("proteomics.txt", sep='\t', row.names=1, header=1)
+corData <- read.table("https://dl.dropboxusercontent.com/u/62447/ASSIGN/proteomics.txt", sep='\t', row.names=1, header=1)
 @
 
 Next, create a list of data used for correlation. The list should contain a

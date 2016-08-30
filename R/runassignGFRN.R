@@ -38,6 +38,7 @@ runassignGFRN <- function(indata, run=c("akt","bad","egfr","her2","igf1r",
                           optimized_geneList=NULL, use_seed=TRUE,
                           sigma_sZero=0.05, sigma_sNonZero=0.5,
                           S_zeroPrior=FALSE, iter=100000, burn_in=50000) {
+
   #list of anchor genes
   anchorGeneList <- list(akt="AKT1", bad="BAD", egfr="EGFR", her2="ERBB2",
                          igf1r="IGF1R", krasgv="KRAS", krasqh="KRAS",
@@ -48,6 +49,8 @@ runassignGFRN <- function(indata, run=c("akt","bad","egfr","her2","igf1r",
                   igf1r="gfp", krasgv="kras_gfp", krasqh="kras_gfp", raf="gfp")
   
   if(is.null(optimized_geneList)){
+    utils::data('gfrn_geneList', package='ASSIGN', envir=environment()) 
+    gfrn_geneList <- get("gfrn_geneList", envir=environment())
     optimized_geneList=list(akt=c(gfrn_geneList$akt_up[1:10],
                                   gfrn_geneList$akt_down[1:10]),
                             bad=c(gfrn_geneList$bad_up[1:125],

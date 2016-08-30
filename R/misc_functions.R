@@ -40,10 +40,10 @@ pcaplot<-function(mat,sub,center=T,scale=T){
     print("verify the subscripts...exiting now")
   }
   else{
-    pca_mat <- prcomp(t(mat), center=center,scale=scale)
+    pca_mat <- stats::prcomp(t(mat), center=center,scale=scale)
     graphics::plot(pca_mat)
     graphics::plot(pca_mat$x[,1],pca_mat$x[,2])
-    abline(h=0,v=0)
+    graphics::abline(h=0,v=0)
     for(i in length(sub):1){
       if(i!=1){
         graphics::points(pca_mat$x[sum(sub[1:i-1]):sum(sub[1:i])],
@@ -66,7 +66,7 @@ gather_assign_results <- function(){
   curr_files <- list.files(pattern="pathway_activity_testset.csv", recursive = T)
   results_df <- data.frame()
   for (i in curr_files){
-    curr <- read.csv(i, header=T, row.names=1)
+    curr <- utils::read.csv(i, header=T, row.names=1)
     colnames(curr) <- strsplit(i, split="/")[[1]][1]
     if(ncol(results_df) ==0){
       results_df <- curr

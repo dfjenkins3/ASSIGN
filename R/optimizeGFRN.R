@@ -75,6 +75,9 @@ optimizeGFRN <- function(indata, correlation, correlationList,
     stop("Make sure the run list and correlationList list names are identical and in the same order")
   }
   
+  utils::data('gfrn_geneList', package='ASSIGN', envir=environment()) 
+  gfrn_geneList <- get("gfrn_geneList", envir=environment())
+  
   # run the pathway predictions
   if(!(correlation_only)){
     for (curr_path in run){
@@ -131,7 +134,8 @@ optimizeGFRN <- function(indata, correlation, correlationList,
                                     colnames(correlation)[cor_column_idx]))
     for (cor_column in cor_column_idx){
       for(run_column in run_column_idx){
-        temp <- cor.test(correlation[,cor_column], results[,run_column], use="pairwise", method="spearman")
+        temp <- stats::cor.test(correlation[,cor_column], results[,run_column],
+                                use="pairwise", method="spearman")
         cor_mat[colnames(results)[run_column],colnames(correlation)[cor_column]] <- temp$estimate
       }
     }

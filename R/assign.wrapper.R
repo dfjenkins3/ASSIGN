@@ -170,7 +170,7 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
         "n_sigGene=",n_sigGene, "adaptive_B=",adaptive_B,"adaptive_S=", adaptive_S,
         "mixture_beta=",mixture_beta,"p_beta=",p_beta,"theta0=", theta0, "theta1=",theta1, 
         "iter=",iter, "burn_in=",burn_in,"The output files are located at:",outputDir,sep=' '))###moom added this 
-  write.table(param,"parameters.txt",col.names=F,sep='\t')###moom added this 
+  utils::write.table(param,"parameters.txt",col.names=F,sep='\t')###moom added this 
   if (!is.null(trainingData)) {
     rownames(coef_train) <- colnames(processed.data$trainingData_sub)
     colnames(coef_train) <- pathName
@@ -194,7 +194,7 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
     ##Evan please double check if this is informative and needed
     grDevices::pdf("Signature_convergence.pdf") 
     graphics::plot(mcmc.chain.testData$S_mcmc)
-    abline(h=0,col="red")
+    graphics::abline(h=0,col="red")
     invisible(grDevices::dev.off())
     ##
     dimnames(mcmc.pos.mean.testData$Delta_pos)=dimnames(processed.data$S_matrix)    

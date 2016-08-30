@@ -4,18 +4,34 @@
 #' performed. This step performs batch correction on the test data,
 #' using reference batch ComBat, to prepare the test data for ASSIGN
 #' analysis.
+#' 
+#' This function downloads the training data from the internet, so an internet
+#' connection is necessary
 #'
 #' @param testData The input test data to batch correct
 #' @param pcaPlots a logical value indicating whether or not the function
 #' should create PCA plots. The default is FALSE.
+#' @param combat_train the ComBat training data data frame. If you do not have
+#' this, the function will attempt to download it from the internet. Please
+#' contact the developers if you have any issues with access to the file.
 #'
-#' @return A list of data.frames is returned, including control (GFP) and signature
-#' data, as well as the batch corrected test data. This data can go directly into
-#' the runassign.single and runassign.multi functions, or subsetted to go directly
-#' into ASSIGN.
+#' @return A list of data.frames is returned, including control (GFP) and
+#' signature data, as well as the batch corrected test data. This data can go
+#' directly into the runassign.single and runassign.multi functions, or
+#' subsetted to go directly into ASSIGN.
 #'
 #' @export ComBat.step2
-ComBat.step2 <- function(testData, pcaPlots=FALSE) {
+ComBat.step2 <- function(testData, pcaPlots=FALSE, combat_train=NULL) {
+  
+  if(is.null(combat_train)){
+    combat_train_file <- tempfile(pattern="combat_train",fileext = ".rda")
+    utils::download.file("https://dl.dropboxusercontent.com/u/62447/ASSIGN/combat_train.rda",
+                         combat_train_file)
+    load(combat_train_file)
+    unlink(combat_train_file)
+    rm(combat_train_file)
+  }
+  
   dat <- merge_drop(combat_train,testData)
   sub <- c(6,6,12,6,6,5,6,6,9,9,9,9,ncol(testData))
   bat <- c(rep(1,ncol(combat_train)),rep(2,ncol(testData)))

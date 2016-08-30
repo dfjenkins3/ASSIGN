@@ -18,7 +18,7 @@ Description: ASSIGN is a computational tool to evaluate the pathway
     pathway is quantified to a score, which represents the extent
     to which a patient sample encompasses the pathway
     deregulation/activation signature.
-License: MIT
+License: MIT + file LICENSE
 LazyData: true
 Imports:
     gplots,

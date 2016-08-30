@@ -44,19 +44,19 @@ ComBat.step2 <- function(testData, pcaPlots=FALSE, combat_train=NULL) {
     pcaplot(combat_expr1,sub)
     invisible(grDevices::dev.off())
   }
-  c_gfp <- subset(combat_expr1, select=GFP.1:GFP.12)
-  c_akt <- subset(combat_expr1, select=AKT.1:AKT.6)
-  c_bad <- subset(combat_expr1, select=BAD.1:BAD.6)
-  c_her2 <- subset(combat_expr1, select=HER2.1:HER2.6)
-  c_igf1r <- subset(combat_expr1, select=IGF1R.1:IGF1R.6)
-  c_raf <- subset(combat_expr1, select=RAF.1:RAF.6)
+  c_gfp      <- combat_expr1[,13:24]
+  c_akt      <- combat_expr1[,25:30]
+  c_bad      <- combat_expr1[,31:36]
+  c_her2     <- combat_expr1[,37:41]
+  c_igf1r    <- combat_expr1[,42:47]
+  c_raf      <- combat_expr1[,48:53]
   c_egfr_gfp <- combat_expr1[,1:6]
-  c_egfr <- combat_expr1[,7:12]
-  c_kras_gfp <- subset(combat_expr1,select=GFP.31:GFP.39)
-  c_kraswt <- subset(combat_expr1,select=KRASWT.1:KRASWT.9)
-  c_krasqh <- subset(combat_expr1,select=KRASQH.1:KRASQH.9)
-  c_krasgv <- subset(combat_expr1,select=KRASGV.1:KRASGV.9)
-  c_test <- combat_expr1[,(ncol(combat_train)+1):ncol(combat_expr1)]
+  c_egfr     <- combat_expr1[,7:12]
+  c_kras_gfp <- combat_expr1[,54:62]
+  c_kraswt   <- combat_expr1[,63:71]
+  c_krasqh   <- combat_expr1[,72:80]
+  c_krasgv   <- combat_expr1[,81:89]
+  c_test     <- combat_expr1[,(ncol(combat_train)+1):ncol(combat_expr1)]
   results <- list(gfp=c_gfp, akt=c_akt, bad=c_bad, her2=c_her2, igf1r=c_igf1r,
                   raf=c_raf, egfr_gfp=c_egfr_gfp, egfr=c_egfr,
                   kras_gfp=c_kras_gfp, kraswt=c_kraswt, krasqh=c_krasqh,

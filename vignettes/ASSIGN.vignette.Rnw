@@ -50,7 +50,7 @@ Some distinctive features of \Rpackage{ASSIGN} are:
   may vary widely due to differences across tissue types, disease statuses, or
   measurement platforms. \Rpackage{ASSIGN} can adaptively estimate background
   gene expression levels across a set of samples.
-  \item \textbf{Context specific signature estimation}: \Rpackage{ASSIGN}
+  \item \textbf{Context-specific signature estimation}: \Rpackage{ASSIGN}
   provides the flexibility to use either an input gene list or magnitudes
   of signature genes as prior information, allowing for adaptive refinement
   of pathway signatures in specific cell or tissue types.
@@ -58,7 +58,7 @@ Some distinctive features of \Rpackage{ASSIGN} are:
   \Rpackage{ASSIGN} regularizes the signature strength coefficients using a
   Bayesian ridge regression formulation by shrinking the strength of the
   irrelevant signature genes toward zero. The parameter regularization
-  constrains the pathway signature to a small group of genes, thus, making the
+  constrains the pathway signature to a small group of genes, making the
   results more biologically interpretable.
 \end{enumerate}
 
@@ -73,8 +73,8 @@ analysis or each individual \Rpackage{ASSIGN} step for more detailed
 intermediate results.
 
 For either analysis, we will first load \Rpackage{ASSIGN} and create a
-temporary directory "tempdir" under the user's current working directory. All
-output generated in this vignette will be saved in "tempdir".
+temporary directory ``tempdir'' under the user's current working directory. All
+output generated in this vignette will be saved in ``tempdir''.
 
 <<setup,echo=TRUE>>=
 library(ASSIGN)
@@ -84,19 +84,19 @@ tempdir <- "tempdir"
 @
 
 Next, load the training data, test data, training labels, and test labels. The
-training dataset is a G (Number of genomic measures) x N (number of samples in
-pathway perturbation experiments) matrix, including five oncogenic pathways:
+training dataset is a G (number of genomic measurements) x N (number of samples
+in pathway perturbation experiments) matrix, including five oncogenic pathways:
 B-Catenin, E2F3, MYC, RAS, and SRC pathways in this example. The training data
 labels denote the column indices of control and experimental samples for each
 perturbation experiment. For example, we specify the column indices of the 10
 RAS control samples to be 1:10, and column indices of 10 RAS activated samples
-to be 39:48. The test dataset is a G (Number of genomic measures) x N (number of
-patient samples) matrix. The test data labels denote the classes of the N test
-samples. In our example, test samples 1-53 are adenocarcinoma and samples 54-111
-are squamous cell carcinoma. We specify "Adeno" and "Squamous" in the vector of
-test data labels. Note that the test data labels are optional. \Rpackage{ASSIGN}
-outputs additional validation plots to evaluate classification accuracy when
-test data labels are provided.
+to be 39:48. The test dataset is a G (number of genomic measurements) x N
+(number of patient samples) matrix. The test data labels denote the classes of
+the N test samples. In our example, test samples 1-53 are adenocarcinoma and
+samples 54-111 are squamous cell carcinoma. We specify ``Adeno'' and
+``Squamous'' in the vector of test data labels. Note that the test data labels
+are optional. \Rpackage{ASSIGN} outputs additional validation plots to evaluate
+classification accuracy when test data labels are provided.
 
 <<datasets-and-labels,eval=FALSE>>=
 data(trainingData1)
@@ -106,7 +106,7 @@ trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10,
                                       myc=1:10, ras=1:10, src=1:10),
                                       bcat = 11:19, e2f3 = 20:28, myc= 29:38,
                                       ras = 39:48, src = 49:55)
-testLabel1 <- rep(c("Adeno","Squamous"),c(53,58))
+testLabel1 <- rep(c("Adeno", "Squamous"), c(53,58))
 @
 
 \subsection{Run \Rpackage{ASSIGN} all-in-one using \Rfunction{assign.wrapper}}
@@ -119,8 +119,8 @@ following files:
 \begin{itemize}
   \item \textbf{pathway\_activity\_testset.csv}: \Rpackage{ASSIGN} predicted
   pathway activity in test samples.
-  \item \textbf{signature\_heatmap\_testset\_prior.pdf}: heatmaps of expression
-  level of prior signature genes in training samples.
+  \item \textbf{signature\_heatmap\_testset\_prior.pdf}: heatmaps of the
+  expression level of prior signature genes in training samples.
   \item \textbf{pathway\_activity\_scatterplot\_testset.pdf}: scatterplot of
   pathway activity in test samples. The x-axis represents test samples ordered
   by pathway activity; the y-axis represents pathway activity.
@@ -136,7 +136,7 @@ following files:
 \begin{itemize}
   \item \textbf{pathway\_activity\_trainingset.csv}: \Rpackage{ASSIGN} predicted
   pathway activity in training samples.
-  \item \textbf{signature\_heatmap\_trainingset.pdf}: heatmaps of expression
+  \item \textbf{signature\_heatmap\_trainingset.pdf}: heatmaps of the expression
   level of signature genes in training samples.
   \item \textbf{pathway\_activity\_scatterplot\_trainingset.pdf}: scatterplot of
   pathway activity in training samples.
@@ -148,7 +148,7 @@ When \Rfunarg{Adaptive\_S} is specified TRUE, \Rfunction{assign.wrapper} also
 outputs the following files:
 
 \begin{itemize}
-  \item \textbf{signature\_heatmap\_testset\_posterior.pdf}: heatmaps of
+  \item \textbf{signature\_heatmap\_testset\_posterior.pdf}: heatmaps of the
   expression level of posterior signature genes in training samples.
   \item \textbf{posterior\_delta.csv}: a csv file of the prior and posterior
   change in expression and probability of inclusion for each gene in each
@@ -166,7 +166,7 @@ Finally, if the \Rfunarg{testLabel} argument is not NULL,
 
 Here we illustrate how to run \Rfunction{assign.wrapper} function with three
 examples. To start, run the code in section~\ref{subsec:example_data} to create
-a temporary directory "tempdir" and load training and test datasets. The
+a temporary directory ``tempdir'' and load training and test datasets. The
 individual parameters are described in detail in
 section~\ref{subsec:step_by_step} and in the \Rpackage{ASSIGN} reference
 manual.
@@ -220,16 +220,16 @@ We developed a series of functions: \Rfunction{assign.preprocess},
 
 \subsubsection{\Rfunction{assign.preprocess}}
 
-We first run \Rfunction{assign.preprocess} function on the input datasets. When
-the genomic measures (i.g., gene expression profiles) of training samples are
-provided, but predetermined pathway signature gene lists are not provided,
-\Rfunction{assign.preprocess} function utilizes a Bayesian univariate regression
-module to select a gene set (usually 50-200 but can be specified by the user)
-based on the absolute value of the regression coefficient (fold change) and the
-posterior probability of the variable to be selected (statistical significance).
-Since we have no predetermined gene lists to provide, we leave the
-\Rfunarg{geneList} option as default NULL. Here we specify 200 signature genes
-for each of the five pathways.
+We first run the \Rfunction{assign.preprocess} function on the input datasets.
+When the genomic measurements (e.g., gene expression profiles) of training
+samples are provided, but predetermined pathway signature gene lists are not
+provided, the \Rfunction{assign.preprocess} function utilizes a Bayesian
+univariate regression module to select a gene set (usually 50-200 genes, but
+this can be specified by the user) based on the absolute value of the regression
+coefficient (fold change) and the posterior probability of the variable to be
+selected (statistical significance). Since we have no predetermined gene lists
+to provide, we leave the \Rfunarg{geneList} option as default NULL. Here we
+specify 200 signature genes for each of the five pathways.
 
 <<assign-preprocess-function,eval=FALSE,results=hide>>=
 # training dataset is available;
@@ -242,10 +242,10 @@ processed.data <- assign.preprocess(trainingData=trainingData1,
 
 Alternatively, the users can have both the training data and the
 curated/predetermined pathway signatures. Some genes in the curated pathway
-signatures, although not significantly differently expressed, need to be
-included for the prediction purpose. In this case, we specify
-\Rfunarg{trainingData} and \Rfunarg{geneList} when BOTH of the training dataset
-and predetermined signature gene list are available.
+signatures, although not significantly differentially expressed, need to be
+included for the purpose of prediction. In this case, we specify the
+\Rfunarg{trainingData} and \Rfunarg{geneList} parameters when both the training
+dataset and predetermined signature gene list are available.
 
 <<assign-preprocess-function,eval=FALSE,results=hide>>=
 # training dataset is available;
@@ -274,10 +274,10 @@ processed.data <- assign.preprocess(trainingData=NULL,
 The \Rfunction{assign.preprocess} function returns the processed training
 dataset (trainingData\_sub) and test dataset (testData\_sub) as well as the
 prior parameters for the background vector (B\_vector), signature matrix
-(S\_matrix) and the probability signature matrix (Pi\_matrix) and differential
-expressed gene lists of each pathways (diffGeneList). The details of the
-\Rfunction{assign.preprocess} output are described in the Value section of the
-manual page of \Rfunction{assign.preprocess} function. The output data of
+(S\_matrix) and the probability signature matrix (Pi\_matrix) and differentially
+expressed gene lists of each pathway (diffGeneList). The details of the
+\Rfunction{assign.preprocess} output are described in the ``value'' section of
+the manual page of \Rfunction{assign.preprocess} function. The output data of
 \Rfunction{assign.preprocess} function are used as the input data of the
 \Rfunction{assign.mcmc} function.
 
@@ -306,17 +306,16 @@ mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub,
 @
 
 The \Rfunction{assign.mcmc} function returns the MCMC chain recording default
-2000 iterations for each parameters. The details of \Rfunction{assign.mcmc}
-output are described in the Value section of the manual page of
+2000 iterations for each parameter. The details of \Rfunction{assign.mcmc}
+output are described in the ``value'' section of the manual page of
 \Rfunction{assign.mcmc} function.
 
 \subsubsection{\Rfunction{assign.convergence}}
 
 We can make a trace plot to check the convergence of the model parameters
-through \Rfunction{assign.convergence}. The \Rfunarg{burn\_in} is set
-default 0, so that the trace plot starts from the first iteration. The
-additional iteration can be specified if the MCMC chain is not converged
-in 2000 iterations.
+through \Rfunction{assign.convergence}. The \Rfunarg{burn\_in} default is 0, so
+that the trace plot starts from the first iteration. Additional iterations
+can be specified if the MCMC chain does not converge in 2000 iterations.
 
 <<assign-convergence-function,eval=FALSE,results=hide>>=
 trace.plot <- assign.convergence(test=mcmc.chain, burn_in=0, iter=2000,
@@ -324,9 +323,9 @@ trace.plot <- assign.convergence(test=mcmc.chain, burn_in=0, iter=2000,
                                  whichSample=NA, whichPath=NA)
 @
 
-The \Rfunction{assign.convergence} function returns the a vector of the
+The \Rfunction{assign.convergence} function returns a vector of the
 estimated values from each Gibbs sampling iteration of the model parameter to be
-checked, and a trace plot of the parameter.
+checked and a trace plot of the parameter.
 
 \subsubsection{\Rfunction{assign.summary}}
 
@@ -341,12 +340,12 @@ have to set the same as those in the \Rfunction{assign.mcmc} function.
 <<assign-summary-function,eval=FALSE,results=hide>>=
 mcmc.pos.mean <- assign.summary(test=mcmc.chain, burn_in=1000,
                                 iter=2000, adaptive_B=TRUE,
-                                adaptive_S=FALSE,mixture_beta=TRUE)
+                                adaptive_S=FALSE, mixture_beta=TRUE)
 @
 
 The \Rfunction{assign.summary} function returns the posterior mean of each
-parameters. The details of \Rfunction{assign.summary} output are described in
-the Value section of the manual page of \Rfunction{assign.summary} function.
+parameter. The details of the \Rfunction{assign.summary} output are described in
+the ``value'' section of the manual page of \Rfunction{assign.summary} function.
 
 \subsubsection{\Rfunction{assign.cv.output}}
 
@@ -355,8 +354,8 @@ training samples. Output files from \Rfunction{assign.cv.output} are:
 
 \begin{enumerate}
   \item \textbf{pathway\_activity\_trainingset.csv}: \Rpackage{ASSIGN} predicted
-  pathway acitivity in training samples.
-  \item \textbf{signature\_heatmap\_trainingset.pdf}: heatmaps of expression
+  pathway activity in training samples.
+  \item \textbf{signature\_heatmap\_trainingset.pdf}: heatmaps of the expression
   level of signature genes in training samples.
   \item \textbf{pathway\_activity\_scatterplot\_trainingset.pdf}: scatterplot of
   pathway activity in training samples.
@@ -380,10 +379,10 @@ samples. Output files from \Rfunction{assign.output} are:
 
 \begin{enumerate}
   \item \textbf{pathway\_activity\_testset.csv}: \Rpackage{ASSIGN} predicted
-  pathway acitivity in test samples.
-  \item \textbf{signature\_heatmap\_testset\_prior.pdf}: heatmaps of expression
-  level of prior signature genes in training samples.
-  \item \textbf{signature\_heatmap\_testset\_posterior.pdf}: heatmaps of
+  pathway activity in test samples.
+  \item \textbf{signature\_heatmap\_testset\_prior.pdf}: heatmaps of the
+  expression level of prior signature genes in training samples.
+  \item \textbf{signature\_heatmap\_testset\_posterior.pdf}: heatmaps of the
   expression level of posterior signature genes in training samples. This plot
   is only generated when \Rfunction{Adaptive\_S} is specified TRUE.
   \item \textbf{pathway\_activity\_scatterplot\_testset.pdf}: scatterplot of
@@ -431,7 +430,7 @@ anchor genes will always contribute to the final signature, and the exclude
 genes will not.
 
 <<anchor-exclude-example,eval=FALSE,results=hide>>=
-dir.create(file.path(tempdir,"anchor_exclude_example"))
+dir.create(file.path(tempdir, "anchor_exclude_example"))
 
 anchorList = list(bcat="224321_at",
                   e2f3="202589_at",
@@ -448,14 +447,14 @@ assign.wrapper(trainingData=trainingData1, testData=testData1,
                trainingLabel=trainingLabel1, testLabel=NULL,
                geneList=geneList1, n_sigGene=NULL, adaptive_B=TRUE,
                adaptive_S=TRUE, mixture_beta=TRUE,
-               outputDir=file.path(tempdir,"anchor_exclude_example"),
+               outputDir=file.path(tempdir, "anchor_exclude_example"),
                anchorGenes=anchorList, excludeGenes=excludeList,
                iter=2000, burn_in=1000)
 @
 
 \subsection{Fraction of Upregulated Genes}
 
-By default, \Rpackage{ASSIGN} bayesian gene selection chooses the signature
+By default, \Rpackage{ASSIGN} Bayesian gene selection chooses the signature
 genes with an equal fraction of genes that increase with pathway activity and
 genes that decrease with pathway activity. Use the pctUp parameter to modify
 this fraction. Set pctUP to NULL to select the most significant genes,
@@ -466,9 +465,9 @@ regardless of direction.
 When running \Rpackage{ASSIGN}, the number of genes in the gene list can affect
 the predictions that \Rpackage{ASSIGN} produces, but it is not always clear how
 long the gene list should be. Included within \Rpackage{ASSIGN} is the
-optimization procedure used in the publication "Activity of distinct growth
+optimization procedure used in the publication ``Activity of distinct growth
 factor receptor network components in breast tumors uncovers two biologically
-relevant subtypes." The function allows you to optimize the gene list lengths
+relevant subtypes.'' The function allows you to optimize the gene list lengths
 for the pathways included in the paper using your own correlation data and gene
 list lengths. This function runs \Rpackage{ASSIGN} pathway prediction on various
 gene list lengths to find the optimum gene list length for the GFRN pathways by
@@ -483,20 +482,20 @@ parallelizable) and then running the correlation step (quick) separately.
 The following example optimizes the pathway length for the AKT pathway based on
 correlating \Rpackage{ASSIGN} predictions with proteomics data. First, read in
 the test data that you want to predict using \Rpackage{ASSIGN} and the
-proteomics data that will be used for correlation:
+data (e.g. proteomics data) that will be used for correlation:
 
 <<anchor-exclude-example1,eval=FALSE,results=hide>>=
-dir.create(file.path(tempdir,"optimization_example"))
-setwd(file.path(tempdir,"optimization_example"))
+dir.create(file.path(tempdir, "optimization_example"))
+setwd(file.path(tempdir, "optimization_example"))
 
-testData <- read.table("../icbp_Rsubread_tpmlog.txt", sep='\t',
+testData <- read.table("icbp_Rsubread_tpmlog.txt", sep='\t',
                        row.names=1, header=1)
 
 corData <- read.table("proteomics.txt", sep='\t', row.names=1, header=1)
 @
 
 Next, create a list of data used for correlation. The list should contain a
-vector of column names from the correlation data from for each of the pathways
+vector of column names from the correlation data for each of the pathways
 that are being optimized. The gene list length that has the largest average
 correlation for the columns in the correlation list will be the optimized gene
 list.

@@ -39,5 +39,6 @@ data_prep_s2 <- function(geneList, anchorGenes, testData, theta0, theta1){
     }
   }
   
-  return(list(testData_sub = test, Delta_matrix = S1, Pi_matrix = Pi_matrix, S_matrix = S2, B_vector = B))
+  return(list(testData_sub = test, Delta_matrix = S1, Pi_matrix = Pi_matrix,
+              S_matrix = S2, B_vector = B))
 }

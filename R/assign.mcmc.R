@@ -98,9 +98,12 @@
 #' processed.data <- assign.preprocess(trainingData=trainingData1, 
 #' testData=testData1, trainingLabel=trainingLabel1, geneList=geneList1)
 #' }
-#' mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub, Bg = processed.data$B_vector, 
-#' X=processed.data$S_matrix, Delta_prior_p = processed.data$Pi_matrix, iter = 20, 
-#' adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE)
+#' mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub,
+#'                           Bg = processed.data$B_vector,
+#'                           X=processed.data$S_matrix,
+#'                           Delta_prior_p = processed.data$Pi_matrix,
+#'                           iter = 20, adaptive_B=TRUE, adaptive_S=FALSE,
+#'                           mixture_beta=TRUE)
 #' 
 #' @export assign.mcmc
 assign.mcmc <- function(Y, Bg, X, Delta_prior_p, iter=2000, adaptive_B=TRUE,

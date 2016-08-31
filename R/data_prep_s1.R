@@ -67,5 +67,9 @@ data_prep_s1 <- function(n_sigGene, trainingData, testData, trainingLabel,
       }
     }
   }
-  return(list(trainingBaseline_sub = trainingBaseline_sub, S_matrix = signature$S_matrix, Delta_matrix = signature$Delta_matrix, Pi_matrix = Pi_matrix, trainingData_sub = trainingData_sub, testData_sub = testData_sub, diffGeneList = diffGeneList))
+  return(list(trainingBaseline_sub = trainingBaseline_sub,
+              S_matrix = signature$S_matrix,
+              Delta_matrix = signature$Delta_matrix, Pi_matrix = Pi_matrix,
+              trainingData_sub = trainingData_sub, testData_sub = testData_sub,
+              diffGeneList = diffGeneList))
 }

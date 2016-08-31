@@ -50,15 +50,20 @@
 #'                        
 #' processed.data <- assign.preprocess(trainingData=trainingData1, 
 #' testData=testData1, trainingLabel=trainingLabel1, geneList=geneList1)
-#' mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub, Bg = processed.data$B_vector, 
-#' X=processed.data$S_matrix, Delta_prior_p = processed.data$Pi_matrix, iter = 20, 
-#' adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE)
-#' mcmc.pos.mean <- assign.summary(test=mcmc.chain, burn_in=10, iter=20, 
-#' adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta = TRUE)
+#' mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub,
+#'                           Bg = processed.data$B_vector,
+#'                           X=processed.data$S_matrix,
+#'                           Delta_prior_p = processed.data$Pi_matrix,
+#'                           iter = 20, adaptive_B=TRUE, adaptive_S=FALSE,
+#'                           mixture_beta=TRUE)
+#' mcmc.pos.mean <- assign.summary(test=mcmc.chain, burn_in=10, iter=20,
+#'                                 adaptive_B=TRUE, adaptive_S=FALSE,
+#'                                 mixture_beta = TRUE)
 #' }
 #' 
 #' @export assign.summary
-assign.summary <- function(test, burn_in=1000, iter=2000, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE){
+assign.summary <- function(test, burn_in=1000, iter=2000, adaptive_B=TRUE,
+                           adaptive_S=FALSE, mixture_beta=TRUE){
   beta_pos <- test$beta_mcmc[burn_in:iter, , ,drop=FALSE]
   beta_pos_mean <- apply(beta_pos, 3:2, mean)
   
@@ -82,7 +87,8 @@ assign.summary <- function(test, burn_in=1000, iter=2000, adaptive_B=TRUE, adapt
     gamma_pos <- test$gamma_mcmc[burn_in:iter, , ,drop=FALSE]
     gamma_pos_mean <- apply(gamma_pos, 3:2, mean)
     
-    rtlist <- c(rtlist, list(gamma_pos=gamma_pos_mean, kappa_pos=kappa_pos_mean))
+    rtlist <- c(rtlist, list(gamma_pos=gamma_pos_mean,
+                             kappa_pos=kappa_pos_mean))
   }
   
   if (adaptive_S == TRUE) {

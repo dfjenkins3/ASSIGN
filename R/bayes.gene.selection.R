@@ -1,7 +1,7 @@
-bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500, burn_in=100,
-                                 sigmaZero = 0.1, sigmaNonZero = 1, alpha_tau = 1,
-                                 beta_tau = 0.01, p = 0.01, pctUp=0.5)
-{
+bayes.gene.selection <- function(n_sigGene, dat, trainingLabel,iter=500,
+                                 burn_in=100, sigmaZero = 0.1, sigmaNonZero = 1,
+                                 alpha_tau = 1, beta_tau = 0.01, p = 0.01,
+                                 pctUp=0.5){
   nPath <- length(trainingLabel) - 1
   bgPosB <- NULL; edPosB <- NULL
   for (i in 1:length(trainingLabel[[1]])){

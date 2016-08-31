@@ -66,10 +66,10 @@
 #' activity and genes that decrease with pathway activity. Use the pctUp
 #' parameter to modify this fraction. Set pctUP to NULL to select the most
 #' significant genes, regardless of direction. The default is 0.5
-#' @param geneselect_iter The number of iterations for bayesian gene selection. The
-#' default is 500.
-#' @param geneselect_burn_in The number of burn-in iterations for bayesian gene selection.
-#' The default is 100
+#' @param geneselect_iter The number of iterations for bayesian gene selection.
+#' The default is 500.
+#' @param geneselect_burn_in The number of burn-in iterations for bayesian gene
+#' selection. The default is 100
 #' @return The assign.wrapper returns one/multiple pathway activity for each
 #' individual training sample and test sample, scatter plots of pathway
 #' activity for each individual pathway in the training and test data,
@@ -88,15 +88,17 @@
 #' data(testData1)
 #' data(geneList1)
 #' 
-#' trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10, ras=1:10,
-#' src=1:10), bcat = 11:19, e2f3 = 20:28, myc= 29:38, ras = 39:48, src = 49:55)
-#' testLabel1 <- rep(c("subtypeA","subtypeB"),c(53,58))
+#' trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10,
+#'                                       ras=1:10, src=1:10),
+#'                        bcat = 11:19, e2f3 = 20:28, myc= 29:38, ras = 39:48,
+#'                        src = 49:55)
+#' testLabel1 <- rep(c("subtypeA","subtypeB"), c(53,58))
 #' 
 #' assign.wrapper(trainingData=trainingData1, testData=testData1,
-#' trainingLabel=trainingLabel1, testLabel=testLabel1, geneList=geneList1,
-#' adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE,
-#' outputDir=tempdir, p_beta=0.01, theta0=0.05, theta1=0.9,
-#' iter=20, burn_in=10)
+#'                trainingLabel=trainingLabel1, testLabel=testLabel1,
+#'                geneList=geneList1, adaptive_B=TRUE, adaptive_S=FALSE,
+#'                mixture_beta=TRUE, outputDir=tempdir, p_beta=0.01,
+#'                theta0=0.05, theta1=0.9, iter=20, burn_in=10)
 #' 
 #' @export assign.wrapper
 assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
@@ -141,14 +143,21 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
   }
   message("Estimating model parameters in the test dataset...")
   mcmc.chain.testData <- assign.mcmc(Y = processed.data$testData_sub, 
-                                     Bg = processed.data$B_vector, X = processed.data$S_matrix,
-                                     Delta_prior_p = processed.data$Pi_matrix, iter = iter,
-                                     sigma_sZero = sigma_sZero, sigma_sNonZero = sigma_sNonZero, S_zeroPrior=S_zeroPrior,
-                                     adaptive_B = adaptive_B, adaptive_S = adaptive_S, mixture_beta = mixture_beta,
+                                     Bg = processed.data$B_vector,
+                                     X = processed.data$S_matrix,
+                                     Delta_prior_p = processed.data$Pi_matrix,
+                                     iter = iter, sigma_sZero = sigma_sZero,
+                                     sigma_sNonZero = sigma_sNonZero,
+                                     S_zeroPrior=S_zeroPrior,
+                                     adaptive_B = adaptive_B,
+                                     adaptive_S = adaptive_S,
+                                     mixture_beta = mixture_beta,
                                      p_beta = p_beta)
   mcmc.pos.mean.testData <- assign.summary(test = mcmc.chain.testData, 
-                                           burn_in = burn_in, iter = iter, adaptive_B = adaptive_B, 
-                                           adaptive_S = adaptive_S, mixture_beta = mixture_beta)
+                                           burn_in = burn_in, iter = iter,
+                                           adaptive_B = adaptive_B,
+                                           adaptive_S = adaptive_S,
+                                           mixture_beta = mixture_beta)
 
   message("Outputing results...")
   if (mixture_beta) {
@@ -164,19 +173,30 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
     coef_test = mcmc.pos.mean.testData$beta_pos
   }
   cwd <- getwd()
-  dir.create(outputDir,showWarnings = F)##moom added this to create the output folder if doesn't exist already.
+
+  ##moom added this to create the output folder if doesn't exist already.
+  dir.create(outputDir,showWarnings = F)
   setwd(outputDir)
-  param=as.matrix(paste(pathName,"analysis was run using the following parameters :",
-        "n_sigGene=",n_sigGene, "adaptive_B=",adaptive_B,"adaptive_S=", adaptive_S,
-        "mixture_beta=",mixture_beta,"p_beta=",p_beta,"theta0=", theta0, "theta1=",theta1, 
-        "iter=",iter, "burn_in=",burn_in,"The output files are located at:",outputDir,sep=' '))###moom added this 
-  utils::write.table(param,"parameters.txt",col.names=F,sep='\t')###moom added this 
+
+  ###moom added this
+  param=as.matrix(paste(pathName,
+                        "analysis was run using the following parameters :",
+                        "n_sigGene=", n_sigGene, "adaptive_B=", adaptive_B,
+                        "adaptive_S=", adaptive_S, "mixture_beta=",
+                        mixture_beta, "p_beta=", p_beta, "theta0=", theta0,
+                        "theta1=", theta1, "iter=",iter, "burn_in=",burn_in,
+                        "The output files are located at:", outputDir,sep=' '))
+
+  utils::write.table(param,"parameters.txt",col.names=F,sep='\t')
+
+  ###moom added this to include the gene list and prior coefficient
   if (!is.null(trainingData)) {
     rownames(coef_train) <- colnames(processed.data$trainingData_sub)
     colnames(coef_train) <- pathName
-    utils::write.csv(processed.data$S_matrix, file = "signature_gene_list_prior.csv")###moom added this to include the gene list and prior coefficient
+    utils::write.csv(processed.data$S_matrix, file = "signature_gene_list_prior.csv")
     utils::write.csv(coef_train, file = "pathway_activity_trainingset.csv")
   }
+
   rownames(coef_test) <- colnames(processed.data$testData_sub)
   colnames(coef_test) <- pathName
   utils::write.csv(coef_test, file = "pathway_activity_testset.csv")
@@ -184,27 +204,44 @@ assign.wrapper<-function (trainingData = NULL, testData, trainingLabel,
     heatmap.train(diffGeneList = processed.data$diffGeneList, 
                   trainingData, trainingLabel)
   }
+
   heatmap.test.prior(diffGeneList = processed.data$diffGeneList, 
                      testData, trainingLabel, testLabel, coef_test, geneList)
+
   if (adaptive_S) {
     heatmap.test.pos(testData = processed.data$testData_sub, 
-                     Delta_pos = mcmc.pos.mean.testData$Delta_pos, trainingLabel, 
-                     testLabel, Delta_cutoff = 0.95, coef_test, geneList)
+                     Delta_pos = mcmc.pos.mean.testData$Delta_pos,
+                     trainingLabel, testLabel, Delta_cutoff = 0.95,
+                     coef_test, geneList)
     ####Added by moom####
-    ##Evan please double check if this is informative and needed
     grDevices::pdf("Signature_convergence.pdf") 
     graphics::plot(mcmc.chain.testData$S_mcmc)
     graphics::abline(h=0,col="red")
     invisible(grDevices::dev.off())
-    ##
+
     dimnames(mcmc.pos.mean.testData$Delta_pos)=dimnames(processed.data$S_matrix)    
-    deltas<-cbind(processed.data$S_matrix,processed.data$Delta_matrix,mcmc.pos.mean.testData$S_pos,mcmc.pos.mean.testData$Delta_pos)
-    colnames(deltas)=c(paste("Prior change in expression",pathName,sep=":"),paste("Prior probability of inclusion",pathName,sep=":"),paste("Posterior change in expression",pathName,sep=":"),paste("Posterior probability of inclusion",pathName,sep=":"))
-    delta_in=NULL
-    for(i in 1:ncol(deltas)){delta_in[i]=(strsplit(colnames(deltas),":")[[i]][2])}
-    utils::write.csv(round(deltas[,order(delta_in)],digits = 4),"posterior_delta.csv",quote=F)
-    #####End: added by moom###
-      }
+    deltas <- cbind(processed.data$S_matrix, processed.data$Delta_matrix,
+                    mcmc.pos.mean.testData$S_pos, 
+                    mcmc.pos.mean.testData$Delta_pos)
+
+    colnames(deltas) <- c(paste("Prior change in expression",
+                                pathName,sep=":"),
+                          paste("Prior probability of inclusion",
+                                pathName,sep=":"),
+                          paste("Posterior change in expression",
+                                pathName,sep=":"),
+                          paste("Posterior probability of inclusion",
+                                pathName,sep=":"))
+    delta_in <- NULL
+
+    for(i in 1:ncol(deltas)){
+      delta_in[i]=(strsplit(colnames(deltas),":")[[i]][2])
+    }
+
+    utils::write.csv(round(deltas[,order(delta_in)],digits = 4),
+                     "posterior_delta.csv",quote=F)
+  }
+
   if (!is.null(trainingData)) {
     scatter.plot.train(coef_train, trainingData, trainingLabel)
   }

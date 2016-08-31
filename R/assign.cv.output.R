@@ -63,7 +63,9 @@
 #' adaptive_B=FALSE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir=tempdir)
 #' 
 #' @export assign.cv.output
-assign.cv.output <- function(processed.data, mcmc.pos.mean.trainingData, trainingData, trainingLabel, adaptive_B=FALSE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir){
+assign.cv.output <- function(processed.data, mcmc.pos.mean.trainingData,
+                             trainingData, trainingLabel, adaptive_B=FALSE,
+                             adaptive_S=FALSE, mixture_beta=TRUE, outputDir){
   message("Outputing results...")
   
   if (mixture_beta){
@@ -79,7 +81,8 @@ assign.cv.output <- function(processed.data, mcmc.pos.mean.trainingData, trainin
   utils::write.csv(coef_train, file="pathway_activity_trainingset.csv")
   
   #heatmaps of each pathway
-  heatmap.train(diffGeneList=processed.data$diffGeneList, trainingData, trainingLabel)
+  heatmap.train(diffGeneList=processed.data$diffGeneList, trainingData,
+                trainingLabel)
   
   #provide test labels for model validation
   scatter.plot.train(coef_train, trainingData, trainingLabel)

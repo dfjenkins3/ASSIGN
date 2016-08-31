@@ -63,7 +63,8 @@ pcaplot<-function(mat,sub,center=T,scale=T){
 #' @export gather_assign_results
 #'
 gather_assign_results <- function(){
-  curr_files <- list.files(pattern="pathway_activity_testset.csv", recursive = T)
+  curr_files <- list.files(pattern="pathway_activity_testset.csv",
+                           recursive = T)
   results_df <- data.frame()
   for (i in curr_files){
     curr <- utils::read.csv(i, header=T, row.names=1)

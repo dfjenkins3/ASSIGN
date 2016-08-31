@@ -49,11 +49,11 @@ activity and genes that decrease with pathway activity. Use the pctUp
 parameter to modify this fraction. Set pctUP to NULL to select the most
 significant genes, regardless of direction. The default is 0.5}
 
-\item{geneselect_iter}{The number of iterations for bayesian gene selection. The
-default is 500.}
+\item{geneselect_iter}{The number of iterations for bayesian gene selection.
+The default is 500.}
 
-\item{geneselect_burn_in}{The number of burn-in iterations for bayesian gene selection.
-The default is 100}
+\item{geneselect_burn_in}{The number of burn-in iterations for bayesian gene
+selection. The default is 100}
 }
 \value{
 \item{trainingData_sub}{The G x N matrix of G genomic measures

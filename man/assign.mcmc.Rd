@@ -130,9 +130,12 @@ trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10,
 processed.data <- assign.preprocess(trainingData=trainingData1, 
 testData=testData1, trainingLabel=trainingLabel1, geneList=geneList1)
 }
-mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub, Bg = processed.data$B_vector, 
-X=processed.data$S_matrix, Delta_prior_p = processed.data$Pi_matrix, iter = 20, 
-adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE)
+mcmc.chain <- assign.mcmc(Y=processed.data$testData_sub,
+                          Bg = processed.data$B_vector,
+                          X=processed.data$S_matrix,
+                          Delta_prior_p = processed.data$Pi_matrix,
+                          iter = 20, adaptive_B=TRUE, adaptive_S=FALSE,
+                          mixture_beta=TRUE)
 
 }
 \author{

@@ -74,8 +74,10 @@ data(trainingData1)
 data(testData1)
 data(geneList1)
 
-trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10, ras=1:10, 
-src=1:10), bcat = 11:19, e2f3 = 20:28, myc= 29:38, ras = 39:48, src = 49:55)
+trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10,
+                                      ras=1:10, src=1:10),
+                       bcat = 11:19, e2f3 = 20:28, myc= 29:38,
+                       ras = 39:48, src = 49:55)
 testLabel1 <- rep(c("subtypeA","subtypeB"),c(53,58))
 
 processed.data <- assign.preprocess(trainingData=trainingData1, 
@@ -88,9 +90,11 @@ mcmc.pos.mean <- assign.summary(test=mcmc.chain, burn_in=10, iter=20,
 adaptive_B=FALSE, adaptive_S=FALSE,mixture_beta=TRUE)
 }
 assign.output(processed.data=processed.data, 
-mcmc.pos.mean.testData=mcmc.pos.mean, trainingData=trainingData1, 
-testData=testData1, trainingLabel=trainingLabel1, testLabel=testLabel1, 
-geneList=NULL, adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE, outputDir=tempdir)
+              mcmc.pos.mean.testData=mcmc.pos.mean,
+              trainingData=trainingData1, testData=testData1,
+              trainingLabel=trainingLabel1, testLabel=testLabel1,
+              geneList=NULL, adaptive_B=TRUE, adaptive_S=FALSE,
+              mixture_beta=TRUE, outputDir=tempdir)
 
 }
 \author{

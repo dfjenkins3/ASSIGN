@@ -89,11 +89,11 @@ activity and genes that decrease with pathway activity. Use the pctUp
 parameter to modify this fraction. Set pctUP to NULL to select the most
 significant genes, regardless of direction. The default is 0.5}
 
-\item{geneselect_iter}{The number of iterations for bayesian gene selection. The
-default is 500.}
+\item{geneselect_iter}{The number of iterations for bayesian gene selection.
+The default is 500.}
 
-\item{geneselect_burn_in}{The number of burn-in iterations for bayesian gene selection.
-The default is 100}
+\item{geneselect_burn_in}{The number of burn-in iterations for bayesian gene
+selection. The default is 100}
 }
 \value{
 The assign.wrapper returns one/multiple pathway activity for each
@@ -127,15 +127,17 @@ data(trainingData1)
 data(testData1)
 data(geneList1)
 
-trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10, ras=1:10,
-src=1:10), bcat = 11:19, e2f3 = 20:28, myc= 29:38, ras = 39:48, src = 49:55)
-testLabel1 <- rep(c("subtypeA","subtypeB"),c(53,58))
+trainingLabel1 <- list(control = list(bcat=1:10, e2f3=1:10, myc=1:10,
+                                      ras=1:10, src=1:10),
+                       bcat = 11:19, e2f3 = 20:28, myc= 29:38, ras = 39:48,
+                       src = 49:55)
+testLabel1 <- rep(c("subtypeA","subtypeB"), c(53,58))
 
 assign.wrapper(trainingData=trainingData1, testData=testData1,
-trainingLabel=trainingLabel1, testLabel=testLabel1, geneList=geneList1,
-adaptive_B=TRUE, adaptive_S=FALSE, mixture_beta=TRUE,
-outputDir=tempdir, p_beta=0.01, theta0=0.05, theta1=0.9,
-iter=20, burn_in=10)
+               trainingLabel=trainingLabel1, testLabel=testLabel1,
+               geneList=geneList1, adaptive_B=TRUE, adaptive_S=FALSE,
+               mixture_beta=TRUE, outputDir=tempdir, p_beta=0.01,
+               theta0=0.05, theta1=0.9, iter=20, burn_in=10)
 
 }
 \author{

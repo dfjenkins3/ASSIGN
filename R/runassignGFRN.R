@@ -80,6 +80,7 @@ runassignGFRN <- function(indata, run=c("akt","bad","egfr","her2","igf1r",
     if(!(anchorGeneList[curr_path] %in% rownames(indata[['test']]))){
       warning(anchorGeneList[curr_path], " not in input data. No anchor gene ",
               "will be used.")
+      anchorGeneList[curr_path] <- NULL
     }
     
     assign.wrapper(trainingData=cbind(indata[[gfpList[[curr_path]]]],

@@ -5,7 +5,7 @@
 \title{Run optimized single pathway ASSIGN}
 \usage{
 runassignGFRN(indata, run = c("akt", "bad", "egfr", "her2", "igf1r", "krasgv",
-  "krasqh", "raf"), optimized_geneList = NULL, use_seed = TRUE,
+  "krasqh", "raf"), optimized_geneList = NULL, use_seed = 1234,
   sigma_sZero = 0.05, sigma_sNonZero = 0.5, S_zeroPrior = FALSE,
   iter = 1e+05, burn_in = 50000)
 }
@@ -19,9 +19,9 @@ cause all eight pathways to be run in serial. Specify a pathway ("akt",
 \item{optimized_geneList}{a list of custom optimized gene lists for the gfrn
 pathways either created manually or output by optimizeGFRN}
 
-\item{use_seed}{a logical value indicating if you want to run the analysis
-using a set seed. This will make the result consistant between runs. The
-default is TRUE.}
+\item{use_seed}{Set the seed before running ASSIGN. This will make the result
+consistant between runs. The default is 1234. Set use_seed as FALSE to not
+set a seed.}
 
 \item{sigma_sZero}{Each element of the signature matrix (S) is modeled by a
 spike-and-slab mixuture distribution. Sigma_sZero is the variance of the

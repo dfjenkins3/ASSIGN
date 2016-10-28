@@ -12,9 +12,9 @@
 #' "bad", "egfr", etc.) or list of pathways to run those pathways only.
 #' @param optimized_geneList a list of custom optimized gene lists for the gfrn
 #' pathways either created manually or output by optimizeGFRN
-#' @param use_seed a logical value indicating if you want to run the analysis
-#' using a set seed. This will make the result consistant between runs. The
-#' default is TRUE.
+#' @param use_seed Set the seed before running ASSIGN. This will make the result
+#' consistant between runs. The default is 1234. Set use_seed as FALSE to not
+#' set a seed.
 #' @param sigma_sZero Each element of the signature matrix (S) is modeled by a
 #' spike-and-slab mixuture distribution. Sigma_sZero is the variance of the
 #' spike normal distribution. The default is 0.05.
@@ -35,7 +35,7 @@
 #'
 runassignGFRN <- function(indata, run=c("akt","bad","egfr","her2","igf1r",
                                         "krasgv","krasqh","raf"),
-                          optimized_geneList=NULL, use_seed=TRUE,
+                          optimized_geneList=NULL, use_seed=1234,
                           sigma_sZero=0.05, sigma_sNonZero=0.5,
                           S_zeroPrior=FALSE, iter=100000, burn_in=50000) {
 
@@ -81,6 +81,10 @@ runassignGFRN <- function(indata, run=c("akt","bad","egfr","her2","igf1r",
       warning(anchorGeneList[curr_path], " not in input data. No anchor gene ",
               "will be used.")
       anchorGeneList[curr_path] <- list(NULL)
+    }
+    
+    if(use_seed){
+      set.seed(use_seed)
     }
     
     assign.wrapper(trainingData=cbind(indata[[gfpList[[curr_path]]]],

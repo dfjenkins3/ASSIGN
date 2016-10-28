@@ -30,6 +30,14 @@
 #'
 #' @return Data is output to the current working directory in a results
 #' directory.
+#' 
+#' @examples
+#' \dontrun{
+#' testData <- read.table("https://dl.dropboxusercontent.com/u/62447/ASSIGN/icbp_Rsubread_tpmlog.txt",
+#'                        sep='\t', row.names=1, header=1)
+#' combat.data <- ComBat.step2(testData, pcaPlots = TRUE)
+#' runassignGFRN(combat.data)
+#' }
 #'
 #' @export runassignGFRN
 #'

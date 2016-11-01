@@ -22,7 +22,10 @@
 #'
 #' @export ComBat.step2
 ComBat.step2 <- function(testData, pcaPlots=FALSE, combat_train=NULL) {
-  
+  if(!("ref.batch" %in% names(as.list(args(sva::ComBat))))){
+    stop("Installed version of sva: ", packageVersion("sva"), " does not have ref.batch option.\n",
+         "Use devtools to install the github version of sva:\ndevtools::install_github('jtleek/sva-devel')")
+  }
   if(is.null(combat_train)){
     combat_train_file <- tempfile(pattern="combat_train",fileext = ".rda")
     utils::download.file("https://dl.dropboxusercontent.com/u/62447/ASSIGN/combat_train.rda",
